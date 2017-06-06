@@ -4,8 +4,7 @@ interface
 
 uses
   System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
-  StrUtils, uModSO, uModSuplier, Datasnap.DBClient, uModUnit, uModBarang,
-  uModDO;
+  StrUtils, Datasnap.DBClient;
 
 type
   {$METHODINFO ON}
@@ -43,31 +42,6 @@ type
     function TestGenerateSQL(AObject: TModApp): TStrings;
   end;
 
-  TSuggestionOrder = class(TBaseServerClass)
-  public
-    function GenerateSO(aTanggal: TDatetime; aMerchan_ID: String;
-        aSupplierMerchan_ID: String = ''): TDataSet;
-    function RetrieveDetails(aID: String): TDataSet;
-  end;
-
-  TCrudPO = class(TCRud)
-  public
-    function GeneratePO(ASOID : String; ASupMGID : String): Boolean;
-  end;
-
-  TCrudSupplier = class(TCrud)
-  public
-    function BeforeSaveToDB(AObject: TModApp): Boolean; override;
-  end;
-
-  TCrudDO = class(TCrud)
-  private
-    function GenerateNP(AModDO: TModDO): string;
-    function UpdateStatusPO(AObject: TModApp): Boolean;
-  protected
-    function AfterSaveToDB(AObject: TModApp): Boolean; override;
-    function BeforeSaveToDB(AObject: TModApp): Boolean; override;
-  end;
 
 
 {$METHODINFO OFF}
@@ -78,7 +52,7 @@ const
 implementation
 
 uses
-  System.Generics.Collections, Datasnap.DSSession, Data.DBXPlatform, uModPO;
+  System.Generics.Collections, Datasnap.DSSession, Data.DBXPlatform;
 function TTestMethod.Hallo(aTanggal: TDateTime): String;
 begin
   Result := 'Hello Word ' + DateToStr(aTanggal);
@@ -333,82 +307,6 @@ begin
     );
 end;
 
-function TSuggestionOrder.GenerateSO(aTanggal: TDatetime; aMerchan_ID: String;
-    aSupplierMerchan_ID: String = ''): TDataSet;
-var
-  S: string;
-begin
-  S := 'select * from FN_GENERATESO(' + QuotedStr(aMerchan_ID) + ','
-    + TDBUtils.QuotD(aTanggal)  +')';
-  if aSupplierMerchan_ID <> '' then
-    S := S + ' where SUPLIER_MERCHAN_ID = ' + QuotedStr(aSupplierMerchan_ID);
-  Result := TDBUtils.OpenQuery(S);
-end;
-
-function TSuggestionOrder.RetrieveDetails(aID: String): TDataSet;
-var
-  S: string;
-begin
-  S := 'select * from V_SO_DETAIL where SO_ID = ' + QuotedStr(Aid);
-  Result := TDBUtils.OpenQuery(S);
-end;
-
-function TCrudPO.GeneratePO(ASOID : String; ASupMGID : String): Boolean;
-var
-  sSOID: string;
-  sSQL: string;
-  sSUPMMID: string;
-begin
-  Result := False;
-
-  sSOID := 'null';
-  if ASOID <> '' then
-    sSOID := QuotedStr(ASOID);
-
-  sSUPMMID := 'null';
-  if ASupMGID <> '' then
-    sSUPMMID := QuotedStr(ASupMGID);
-
-  sSQL   := 'exec dbo.SP_GENERATE_PO ' + sSOID + ',' + sSUPMMID;
-  try
-    TDBUtils.ExecuteSQL(sSQL, False);
-    TDBUtils.Commit;
-    Result := False;
-  except
-    TDBUtils.RollBack;
-  end;
-end;
-
-function TCrudSupplier.BeforeSaveToDB(AObject: TModApp): Boolean;
-var
-  lModSupplier: TModSuplier;
-//  lSS: TStrings;
-  I: Integer;
-begin
-  Result := True;
-
-  lModSupplier := TModSuplier(AObject);
-  for I := 0 to lModSupplier.SuplierMerchanGroups.Count - 1 do
-  begin
-    if lModSupplier.SuplierMerchanGroups[i].SUPMG_IS_DIF_CONTACT = 0 then
-    begin
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_ADDRESS := lModSupplier.SUP_ADDRESS;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_CITY := lModSupplier.SUP_CITY;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_TELP := lModSupplier.SUP_TELP;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_FAX := lModSupplier.SUP_FAX;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_POST_CODE := lModSupplier.SUP_POST_CODE;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_CONTACT_PERSON := lModSupplier.SUP_CONTACT_PERSON;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_TITLE := lModSupplier.SUP_TITLE;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_BANK_ACCOUNT_NO := lModSupplier.SUP_BANK_ACCOUNT_NO;
-      lModSupplier.SuplierMerchanGroups[i].BANK := lModSupplier.BANK;
-      lModSupplier.SuplierMerchanGroups[i].SUPMG_BANK_ACCOUNT_NAME := lModSupplier.SUP_BANK_ACCOUNT_NAME;
-    end;
-
-    Result := True;
-
-  end;
-
-end;
 
 procedure TBaseServerClass.AfterExecuteMethod;
 begin
@@ -416,86 +314,5 @@ begin
     GetInvocationMetaData.CloseSession := True;
 end;
 
-function TCrudDO.AfterSaveToDB(AObject: TModApp): Boolean;
-begin
-  inherited;
-
-  Result := False;
-
-  if UpdateStatusPO(AObject) then
-    Result := True;
-
-end;
-
-function TCrudDO.BeforeSaveToDB(AObject: TModApp): Boolean;
-begin
-  Result := False;
-
-  with AObject as TModDO do
-  begin
-    if (AObject.ID = '') then
-    begin
-      DO_NP := GenerateNP(TModDO(AObject));
-      if DO_NP = '' then
-        Exit;
-    end;
-  end;
-
-  Result := True;
-end;
-
-function TCrudDO.GenerateNP(AModDO: TModDO): string;
-var
-  iCounter: Integer;
-  sSQL: string;
-begin
-  Result := 'M' + FormatDateTime('YYMMDD', AModDO.DO_DATE);
-
-  sSQL   := 'select right(MAX(DO_NP),3) as NP from DO ' +
-            ' where DO_NP like ' + QuotedStr(Result + '%');
-
-  with TDBUtils.OpenDataset(sSQL) do
-  begin
-    try
-      if Fields[0].IsNull then
-        iCounter := 0
-      else
-        iCounter := StrToIntDef(Fields[0].AsString,0);
-
-      iCounter := iCounter + 1;
-      Result   := Result + RightStr('000' + IntToStr(iCounter),3);
-    finally
-      Free;
-    end;
-  end;
-end;
-
-function TCrudDO.UpdateStatusPO(AObject: TModApp): Boolean;
-var
-  sSQL: string;
-begin
-  try
-    sSQL := 'update a set a.REF$STATUS_PO_ID = (select REF$STATUS_PO_ID from REF$STATUS_PO' +
-            ' where STAPO_NAME = ''GENERATED'') from PO a' +
-            ' left join DO b on a.PO_ID = b.PO_ID' +
-            ' left join REF$STATUS_PO c on a.REF$STATUS_PO_ID = c.REF$STATUS_PO_ID' +
-            ' where b.PO_ID is null' +
-            ' and c.STAPO_NAME not in (''CANCEL'',''CLOSE'')';
-
-    TDBUtils.ExecuteSQL(sSQL, False);
-
-    sSQL := 'update a set a.REF$STATUS_PO_ID = (select REF$STATUS_PO_ID from REF$STATUS_PO' +
-            ' where STAPO_NAME = ''RECEIVED'') from PO a' +
-            ' inner join DO b on a.PO_ID = b.PO_ID' +
-            ' where b.do_id = ' + QuotedStr(AObject.ID);
-
-    TDBUtils.ExecuteSQL(sSQL, False);
-    Result := True;
-  except
-    Result := False;
-  end;
-
-
-end;
 
 end.

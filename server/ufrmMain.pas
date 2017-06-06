@@ -8,7 +8,7 @@ uses
   Vcl.AppEvnts, Vcl.StdCtrls, IdHTTPWebBrokerBridge, Web.HTTPApp,
   System.ImageList, Vcl.ImgList, cxGraphics, cxControls, cxLookAndFeels,
   cxLookAndFeelPainters, cxContainer, cxEdit, cxTextEdit, Vcl.Menus,
-  System.Actions, Vcl.ActnList, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Samples.Spin,uModDO,
+  System.Actions, Vcl.ActnList, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Samples.Spin,
   uServerClasses, uUnit, uCPR, uIndikator;
 
 type
@@ -77,7 +77,7 @@ implementation
 
 uses
   WinApi.Windows, Winapi.ShellApi, Datasnap.DSSession, uDBUtils,
-  ServerContainerUnit, uModTest, uModBank, WebModuleRetnoUnit, uTSINIFile,
+  ServerContainerUnit, WebModuleRetnoUnit, uTSINIFile,
   Datasnap.DSHTTP;
 
 procedure TfrmMain.AEIdle(Sender: TObject; var Done: Boolean);
@@ -198,8 +198,8 @@ end;
 
 procedure TfrmMain.grpDBClick(Sender: TObject);
 begin
-  TModDO.Create;
-  TModDOItem.Create;
+//  TModDO.Create;
+//  TModDOItem.Create;
 end;
 
 procedure TfrmMain.mmLogChange(Sender: TObject);

@@ -75,10 +75,10 @@ begin
   TCustServerClass.Create(Self, DSServer, TDSReport, DSServerClass.LifeCycle);
 
   //custom class here :
-  TCustServerClass.Create(Self, DSServer, TSuggestionOrder, DSServerClass.LifeCycle);
-  TCustServerClass.Create(Self, DSServer, TCrudSupplier, DSServerClass.LifeCycle);
-  TCustServerClass.Create(Self, DSServer, TCrudPO, DSServerClass.LifeCycle);
-  TCustServerClass.Create(Self, DSServer, TCrudDO, DSServerClass.LifeCycle);
+//  TCustServerClass.Create(Self, DSServer, TSuggestionOrder, DSServerClass.LifeCycle);
+//  TCustServerClass.Create(Self, DSServer, TCrudSupplier, DSServerClass.LifeCycle);
+//  TCustServerClass.Create(Self, DSServer, TCrudPO, DSServerClass.LifeCycle);
+//  TCustServerClass.Create(Self, DSServer, TCrudDO, DSServerClass.LifeCycle);
 end;
 
 

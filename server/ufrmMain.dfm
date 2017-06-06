@@ -5418,8 +5418,8 @@ object frmMain: TfrmMain
     Left = 0
     Top = 152
     Width = 737
-    Height = 97
-    Align = alTop
+    Height = 267
+    Align = alClient
     BorderStyle = bsNone
     Color = clBackground
     Font.Charset = DEFAULT_CHARSET
@@ -5435,6 +5435,7 @@ object frmMain: TfrmMain
     TabOrder = 1
     WordWrap = False
     OnChange = mmLogChange
+    ExplicitHeight = 217
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -5444,13 +5445,18 @@ object frmMain: TfrmMain
     Panels = <>
   end
   object btnTest: TButton
-    Left = 307
-    Top = 288
-    Width = 75
+    Left = 0
+    Top = 419
+    Width = 737
     Height = 25
+    Align = alBottom
     Caption = 'btnTest'
     TabOrder = 3
+    Visible = False
     OnClick = btnTestClick
+    ExplicitLeft = 307
+    ExplicitTop = 288
+    ExplicitWidth = 75
   end
   object AE: TApplicationEvents
     OnIdle = AEIdle
