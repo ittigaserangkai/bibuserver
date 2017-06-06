@@ -1,0 +1,2 @@
+Insert Into TCPRSetting(NAMA,IsActive,UnitUsaha_ID,ID) values('TSPM Juni 2017',1,NULL,'{26A8DE03-E29B-48A4-9EA6-F0CACA0F0FFD}');
+Delete From TCPRSettingItem where CPRSetting_ID='{26A8DE03-E29B-48A4-9EA6-F0CACA0F0FFD}';
