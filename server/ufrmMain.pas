@@ -140,10 +140,11 @@ var
   I: Integer;
 
 begin
+  lCPRSetting := TModCPRSetting.Create;
+
   with TCrud.Create(Self) do
   begin
     try
-      lCPRSetting := TModCPRSetting.Create;
       lCPRSetting.UnitUsaha := TModUnit.CreateID('C854BEF8-6AC6-437B-A308-06403053FA59');
       lCPRSetting.NAMA := IntToStr(GetTickCount);
       lCPRSetting.IsActive := 1;

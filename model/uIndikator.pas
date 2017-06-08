@@ -29,7 +29,7 @@ implementation
 
 class function TModIndikator.GetTableName: String;
 begin
-  Result := 'TModIndikator';
+  Result := 'TIndikator';
 end;
 
 initialization
