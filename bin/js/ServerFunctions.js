@@ -1,671 +1,797 @@
 // 
 // Created by the DataSnap proxy generator.
+// 6/8/2017 2:03:14 PM
 // 
 
-function DSAdmin(connectionInfo)
-{
-  this.executor = new ServerFunctionExecutor("DSAdmin",connectionInfo);
+package com.embarcadero.javaandroid;
 
-  /*
-   * @return result - Type on server: string
-   */
-  this.GetPlatformName = function() {
-    var returnObject = this.executor.executeMethod('GetPlatformName', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        return resultObject;
-      }
-      return returnObject;
+import java.util.Date;
+
+public class DSProxy {
+  public static class TServerMethods extends DSAdmin {
+    public TServerMethods(DSRESTConnection Connection) {
+      super(Connection);
     }
-  };
-
-  this.GetPlatformName_URL = function() {
-    return this.executor.getMethodURL("GetPlatformName", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @return result - Type on server: Boolean
-   */
-  this.ClearResources = function() {
-    var returnObject = this.executor.executeMethod('ClearResources', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        return resultObject;
+    
+    
+    private DSRESTParameterMetaData[] TServerMethods_EchoString_Metadata;
+    private DSRESTParameterMetaData[] get_TServerMethods_EchoString_Metadata() {
+      if (TServerMethods_EchoString_Metadata == null) {
+        TServerMethods_EchoString_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("Value", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.WideStringType, "string"),
+        };
       }
-      return returnObject;
+      return TServerMethods_EchoString_Metadata;
     }
-  };
 
-  this.ClearResources_URL = function() {
-    return this.executor.getMethodURL("ClearResources", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @return result - Type on server: TDBXReader
-   */
-  this.FindPackages = function() {
-    var returnObject = this.executor.executeMethod('FindPackages', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param Value [in] - Type on server: string
+     * @return result - Type on server: string
+     */
+    public String EchoString(String Value) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TServerMethods.EchoString");
+      cmd.prepare(get_TServerMethods_EchoString_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(Value);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsString();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TServerMethods_ReverseString_Metadata;
+    private DSRESTParameterMetaData[] get_TServerMethods_ReverseString_Metadata() {
+      if (TServerMethods_ReverseString_Metadata == null) {
+        TServerMethods_ReverseString_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("Value", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.WideStringType, "string"),
+        };
       }
-      return returnObject;
+      return TServerMethods_ReverseString_Metadata;
     }
-  };
 
-  this.FindPackages_URL = function() {
-    return this.executor.getMethodURL("FindPackages", "GET", [], arguments[0])[0];
-  };
+    /**
+     * @param Value [in] - Type on server: string
+     * @return result - Type on server: string
+     */
+    public String ReverseString(String Value) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TServerMethods.ReverseString");
+      cmd.prepare(get_TServerMethods_ReverseString_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(Value);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsString();
+    }
+  }
 
-  /*
-   * @param PackageName [in] - Type on server: string
-   * @param ClassPattern [in] - Type on server: string
-   * @return result - Type on server: TDBXReader
-   */
-  this.FindClasses = function(PackageName, ClassPattern) {
-    var returnObject = this.executor.executeMethod('FindClasses', "GET", [PackageName, ClassPattern], arguments[2], true, arguments[3], arguments[4]);
-    if (arguments[2] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.PackageName = PackageName;
-        resultObject.ClassPattern = ClassPattern;
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+  public static class TTestMethod extends DSAdmin {
+    public TTestMethod(DSRESTConnection Connection) {
+      super(Connection);
+    }
+    
+    
+    private DSRESTParameterMetaData[] TTestMethod_Hallo_Metadata;
+    private DSRESTParameterMetaData[] get_TTestMethod_Hallo_Metadata() {
+      if (TTestMethod_Hallo_Metadata == null) {
+        TTestMethod_Hallo_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("aTanggal", DSRESTParamDirection.Input, DBXDataTypes.DateTimeType, "TDateTime"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.WideStringType, "string"),
+        };
       }
-      return returnObject;
+      return TTestMethod_Hallo_Metadata;
     }
-  };
 
-  this.FindClasses_URL = function(PackageName, ClassPattern) {
-    return this.executor.getMethodURL("FindClasses", "GET", [PackageName, ClassPattern], arguments[2])[0];
-  };
+    /**
+     * @param aTanggal [in] - Type on server: TDateTime
+     * @return result - Type on server: string
+     */
+    public String Hallo(Date aTanggal) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TTestMethod.Hallo");
+      cmd.prepare(get_TTestMethod_Hallo_Metadata());
+      cmd.getParameter(0).getValue().SetAsDateTime(aTanggal);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsString();
+    }
+  }
 
-  /*
-   * @param PackageName [in] - Type on server: string
-   * @param ClassPattern [in] - Type on server: string
-   * @param MethodPattern [in] - Type on server: string
-   * @return result - Type on server: TDBXReader
-   */
-  this.FindMethods = function(PackageName, ClassPattern, MethodPattern) {
-    var returnObject = this.executor.executeMethod('FindMethods', "GET", [PackageName, ClassPattern, MethodPattern], arguments[3], true, arguments[4], arguments[5]);
-    if (arguments[3] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.PackageName = PackageName;
-        resultObject.ClassPattern = ClassPattern;
-        resultObject.MethodPattern = MethodPattern;
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+  public static class TCrud extends DSAdmin {
+    public TCrud(DSRESTConnection Connection) {
+      super(Connection);
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_SaveToDB_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_SaveToDB_Metadata() {
+      if (TCrud_SaveToDB_Metadata == null) {
+        TCrud_SaveToDB_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("AObject", DSRESTParamDirection.Input, DBXDataTypes.JsonValueType, "TModApp"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.BooleanType, "Boolean"),
+        };
       }
-      return returnObject;
+      return TCrud_SaveToDB_Metadata;
     }
-  };
 
-  this.FindMethods_URL = function(PackageName, ClassPattern, MethodPattern) {
-    return this.executor.getMethodURL("FindMethods", "GET", [PackageName, ClassPattern, MethodPattern], arguments[3])[0];
-  };
-
-  /*
-   * @param ClassReader [in] - Type on server: TDBXReader
-   */
-  this.CreateServerClasses = function(ClassReader) {
-    this.executor.executeMethod('"CreateServerClasses"', "POST", [ClassReader], arguments[1], false, arguments[2], arguments[3]);
-  };
-
-  /*
-   * @param ClassReader [in] - Type on server: TDBXReader
-   */
-  this.DropServerClasses = function(ClassReader) {
-    this.executor.executeMethod('"DropServerClasses"', "POST", [ClassReader], arguments[1], false, arguments[2], arguments[3]);
-  };
-
-  /*
-   * @param MethodReader [in] - Type on server: TDBXReader
-   */
-  this.CreateServerMethods = function(MethodReader) {
-    this.executor.executeMethod('"CreateServerMethods"', "POST", [MethodReader], arguments[1], false, arguments[2], arguments[3]);
-  };
-
-  /*
-   * @param MethodReader [in] - Type on server: TDBXReader
-   */
-  this.DropServerMethods = function(MethodReader) {
-    this.executor.executeMethod('"DropServerMethods"', "POST", [MethodReader], arguments[1], false, arguments[2], arguments[3]);
-  };
-
-  /*
-   * @return result - Type on server: TDBXReader
-   */
-  this.GetServerClasses = function() {
-    var returnObject = this.executor.executeMethod('GetServerClasses', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param AObject [in] - Type on server: TModApp
+     * @return result - Type on server: Boolean
+     */
+    public boolean SaveToDB(TJSONObject AObject) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.POST);
+      cmd.setText("TCrud.SaveToDB");
+      cmd.prepare(get_TCrud_SaveToDB_Metadata());
+      cmd.getParameter(0).getValue().SetAsJSONValue(AObject);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsBoolean();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_DeleteFromDB_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_DeleteFromDB_Metadata() {
+      if (TCrud_DeleteFromDB_Metadata == null) {
+        TCrud_DeleteFromDB_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("AObject", DSRESTParamDirection.Input, DBXDataTypes.JsonValueType, "TModApp"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.BooleanType, "Boolean"),
+        };
       }
-      return returnObject;
+      return TCrud_DeleteFromDB_Metadata;
     }
-  };
 
-  this.GetServerClasses_URL = function() {
-    return this.executor.getMethodURL("GetServerClasses", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @return result - Type on server: TJSONArray
-   */
-  this.ListClasses = function() {
-    var returnObject = this.executor.executeMethod('ListClasses', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param AObject [in] - Type on server: TModApp
+     * @return result - Type on server: Boolean
+     */
+    public boolean DeleteFromDB(TJSONObject AObject) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.POST);
+      cmd.setText("TCrud.DeleteFromDB");
+      cmd.prepare(get_TCrud_DeleteFromDB_Metadata());
+      cmd.getParameter(0).getValue().SetAsJSONValue(AObject);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsBoolean();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_OpenQuery_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_OpenQuery_Metadata() {
+      if (TCrud_OpenQuery_Metadata == null) {
+        TCrud_OpenQuery_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("S", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
       }
-      return returnObject;
+      return TCrud_OpenQuery_Metadata;
     }
-  };
 
-  this.ListClasses_URL = function() {
-    return this.executor.getMethodURL("ListClasses", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @param ClassName [in] - Type on server: string
-   * @return result - Type on server: TJSONObject
-   */
-  this.DescribeClass = function(ClassName) {
-    var returnObject = this.executor.executeMethod('DescribeClass', "GET", [ClassName], arguments[1], true, arguments[2], arguments[3]);
-    if (arguments[1] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ClassName = ClassName;
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param S [in] - Type on server: string
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet OpenQuery(String S) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TCrud.OpenQuery");
+      cmd.prepare(get_TCrud_OpenQuery_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(S);
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(1).getValue().GetAsTable();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_Retrieve_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_Retrieve_Metadata() {
+      if (TCrud_Retrieve_Metadata == null) {
+        TCrud_Retrieve_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("ModClassName", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("AID", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TModApp"),
+        };
       }
-      return returnObject;
+      return TCrud_Retrieve_Metadata;
     }
-  };
 
-  this.DescribeClass_URL = function(ClassName) {
-    return this.executor.getMethodURL("DescribeClass", "GET", [ClassName], arguments[1])[0];
-  };
-
-  /*
-   * @param ClassName [in] - Type on server: string
-   * @return result - Type on server: TJSONArray
-   */
-  this.ListMethods = function(ClassName) {
-    var returnObject = this.executor.executeMethod('ListMethods', "GET", [ClassName], arguments[1], true, arguments[2], arguments[3]);
-    if (arguments[1] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ClassName = ClassName;
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param ModClassName [in] - Type on server: string
+     * @param AID [in] - Type on server: string
+     * @return result - Type on server: TModApp
+     */
+    public TJSONObject Retrieve(String ModClassName, String AID) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TCrud.Retrieve");
+      cmd.prepare(get_TCrud_Retrieve_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(ModClassName);
+      cmd.getParameter(1).getValue().SetAsString(AID);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(2).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_GenerateCustomNo_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_GenerateCustomNo_Metadata() {
+      if (TCrud_GenerateCustomNo_Metadata == null) {
+        TCrud_GenerateCustomNo_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("aTableName", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("aFieldName", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("aCountDigit", DSRESTParamDirection.Input, DBXDataTypes.Int32Type, "Integer"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.WideStringType, "string"),
+        };
       }
-      return returnObject;
+      return TCrud_GenerateCustomNo_Metadata;
     }
-  };
 
-  this.ListMethods_URL = function(ClassName) {
-    return this.executor.getMethodURL("ListMethods", "GET", [ClassName], arguments[1])[0];
-  };
-
-  /*
-   * @param ServerMethodName [in] - Type on server: string
-   * @return result - Type on server: TJSONObject
-   */
-  this.DescribeMethod = function(ServerMethodName) {
-    var returnObject = this.executor.executeMethod('DescribeMethod', "GET", [ServerMethodName], arguments[1], true, arguments[2], arguments[3]);
-    if (arguments[1] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ServerMethodName = ServerMethodName;
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param aTableName [in] - Type on server: string
+     * @param aFieldName [in] - Type on server: string
+     * @param aCountDigit [in] - Type on server: Integer
+     * @return result - Type on server: string
+     */
+    public String GenerateCustomNo(String aTableName, String aFieldName, int aCountDigit) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TCrud.GenerateCustomNo");
+      cmd.prepare(get_TCrud_GenerateCustomNo_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(aTableName);
+      cmd.getParameter(1).getValue().SetAsString(aFieldName);
+      cmd.getParameter(2).getValue().SetAsInt32(aCountDigit);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(3).getValue().GetAsString();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_GenerateNo_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_GenerateNo_Metadata() {
+      if (TCrud_GenerateNo_Metadata == null) {
+        TCrud_GenerateNo_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("aClassName", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.WideStringType, "string"),
+        };
       }
-      return returnObject;
+      return TCrud_GenerateNo_Metadata;
     }
-  };
 
-  this.DescribeMethod_URL = function(ServerMethodName) {
-    return this.executor.getMethodURL("DescribeMethod", "GET", [ServerMethodName], arguments[1])[0];
-  };
-
-  /*
-   * @return result - Type on server: TDBXReader
-   */
-  this.GetServerMethods = function() {
-    var returnObject = this.executor.executeMethod('GetServerMethods', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param aClassName [in] - Type on server: string
+     * @return result - Type on server: string
+     */
+    public String GenerateNo(String aClassName) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TCrud.GenerateNo");
+      cmd.prepare(get_TCrud_GenerateNo_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(aClassName);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsString();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_RetrieveSingle_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_RetrieveSingle_Metadata() {
+      if (TCrud_RetrieveSingle_Metadata == null) {
+        TCrud_RetrieveSingle_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("ModClassName", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("AID", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TModApp"),
+        };
       }
-      return returnObject;
+      return TCrud_RetrieveSingle_Metadata;
     }
-  };
 
-  this.GetServerMethods_URL = function() {
-    return this.executor.getMethodURL("GetServerMethods", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @return result - Type on server: TDBXReader
-   */
-  this.GetServerMethodParameters = function() {
-    var returnObject = this.executor.executeMethod('GetServerMethodParameters', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param ModClassName [in] - Type on server: string
+     * @param AID [in] - Type on server: string
+     * @return result - Type on server: TModApp
+     */
+    public TJSONObject RetrieveSingle(String ModClassName, String AID) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TCrud.RetrieveSingle");
+      cmd.prepare(get_TCrud_RetrieveSingle_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(ModClassName);
+      cmd.getParameter(1).getValue().SetAsString(AID);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(2).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_RetrieveByCode_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_RetrieveByCode_Metadata() {
+      if (TCrud_RetrieveByCode_Metadata == null) {
+        TCrud_RetrieveByCode_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("ModClassName", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("aCode", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TModApp"),
+        };
       }
-      return returnObject;
+      return TCrud_RetrieveByCode_Metadata;
     }
-  };
 
-  this.GetServerMethodParameters_URL = function() {
-    return this.executor.getMethodURL("GetServerMethodParameters", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @return result - Type on server: TDBXReader
-   */
-  this.GetDatabaseConnectionProperties = function() {
-    var returnObject = this.executor.executeMethod('GetDatabaseConnectionProperties', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param ModClassName [in] - Type on server: string
+     * @param aCode [in] - Type on server: string
+     * @return result - Type on server: TModApp
+     */
+    public TJSONObject RetrieveByCode(String ModClassName, String aCode) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TCrud.RetrieveByCode");
+      cmd.prepare(get_TCrud_RetrieveByCode_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(ModClassName);
+      cmd.getParameter(1).getValue().SetAsString(aCode);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(2).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_SaveToDBLog_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_SaveToDBLog_Metadata() {
+      if (TCrud_SaveToDBLog_Metadata == null) {
+        TCrud_SaveToDBLog_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("AObject", DSRESTParamDirection.Input, DBXDataTypes.JsonValueType, "TModApp"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.BooleanType, "Boolean"),
+        };
       }
-      return returnObject;
+      return TCrud_SaveToDBLog_Metadata;
     }
-  };
 
-  this.GetDatabaseConnectionProperties_URL = function() {
-    return this.executor.getMethodURL("GetDatabaseConnectionProperties", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @return result - Type on server: string
-   */
-  this.GetDSServerName = function() {
-    var returnObject = this.executor.executeMethod('GetDSServerName', "GET", [], arguments[0], true, arguments[1], arguments[2]);
-    if (arguments[0] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.result = resultArray[0];
-        return resultObject;
+    /**
+     * @param AObject [in] - Type on server: TModApp
+     * @return result - Type on server: Boolean
+     */
+    public boolean SaveToDBLog(TJSONObject AObject) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.POST);
+      cmd.setText("TCrud.SaveToDBLog");
+      cmd.prepare(get_TCrud_SaveToDBLog_Metadata());
+      cmd.getParameter(0).getValue().SetAsJSONValue(AObject);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsBoolean();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_SaveToDBID_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_SaveToDBID_Metadata() {
+      if (TCrud_SaveToDBID_Metadata == null) {
+        TCrud_SaveToDBID_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("AObject", DSRESTParamDirection.Input, DBXDataTypes.JsonValueType, "TModApp"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.WideStringType, "string"),
+        };
       }
-      return returnObject;
+      return TCrud_SaveToDBID_Metadata;
     }
-  };
 
-  this.GetDSServerName_URL = function() {
-    return this.executor.getMethodURL("GetDSServerName", "GET", [], arguments[0])[0];
-  };
-
-  /*
-   * @param ChannelName [in] - Type on server: string
-   * @param ClientManagerId [in] - Type on server: string
-   * @param CallbackId [in] - Type on server: string
-   * @param ChannelNames [in] - Type on server: string
-   * @param SecurityToken [in] - Type on server: string
-   * @param ResponseData [in] - Type on server: TJSONValue
-   * @return result - Type on server: TJSONValue
-   */
-  this.ConsumeClientChannel = function(ChannelName, ClientManagerId, CallbackId, ChannelNames, SecurityToken, ResponseData) {
-    var returnObject = this.executor.executeMethod('"ConsumeClientChannel"', "POST", [ChannelName, ClientManagerId, CallbackId, ChannelNames, SecurityToken, ResponseData], arguments[6], true, arguments[7], arguments[8]);
-    if (arguments[6] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ChannelName = ChannelName;
-        resultObject.ClientManagerId = ClientManagerId;
-        resultObject.CallbackId = CallbackId;
-        resultObject.ChannelNames = ChannelNames;
-        resultObject.SecurityToken = SecurityToken;
-        resultObject.ResponseData = ResponseData;
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param AObject [in] - Type on server: TModApp
+     * @return result - Type on server: string
+     */
+    public String SaveToDBID(TJSONObject AObject) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.POST);
+      cmd.setText("TCrud.SaveToDBID");
+      cmd.prepare(get_TCrud_SaveToDBID_Metadata());
+      cmd.getParameter(0).getValue().SetAsJSONValue(AObject);
+      getConnection().execute(cmd);
+      return  cmd.getParameter(1).getValue().GetAsString();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_TestGenerateSQL_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_TestGenerateSQL_Metadata() {
+      if (TCrud_TestGenerateSQL_Metadata == null) {
+        TCrud_TestGenerateSQL_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("AObject", DSRESTParamDirection.Input, DBXDataTypes.JsonValueType, "TModApp"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TStrings"),
+        };
       }
-      return returnObject;
+      return TCrud_TestGenerateSQL_Metadata;
     }
-  };
 
-  /*
-   * @param ChannelName [in] - Type on server: string
-   * @param ClientManagerId [in] - Type on server: string
-   * @param CallbackId [in] - Type on server: string
-   * @param ChannelNames [in] - Type on server: string
-   * @param SecurityToken [in] - Type on server: string
-   * @param Timeout [in] - Type on server: Integer
-   * @param ResponseData [in] - Type on server: TJSONValue
-   * @return result - Type on server: TJSONValue
-   */
-  this.ConsumeClientChannelTimeout = function(ChannelName, ClientManagerId, CallbackId, ChannelNames, SecurityToken, Timeout, ResponseData) {
-    var returnObject = this.executor.executeMethod('"ConsumeClientChannelTimeout"', "POST", [ChannelName, ClientManagerId, CallbackId, ChannelNames, SecurityToken, Timeout, ResponseData], arguments[7], true, arguments[8], arguments[9]);
-    if (arguments[7] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ChannelName = ChannelName;
-        resultObject.ClientManagerId = ClientManagerId;
-        resultObject.CallbackId = CallbackId;
-        resultObject.ChannelNames = ChannelNames;
-        resultObject.SecurityToken = SecurityToken;
-        resultObject.Timeout = Timeout;
-        resultObject.ResponseData = ResponseData;
-        resultObject.result = resultArray[0];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
+    /**
+     * @param AObject [in] - Type on server: TModApp
+     * @return result - Type on server: TStrings
+     */
+    public TJSONObject TestGenerateSQL(TJSONObject AObject) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.POST);
+      cmd.setText("TCrud.TestGenerateSQL");
+      cmd.prepare(get_TCrud_TestGenerateSQL_Metadata());
+      cmd.getParameter(0).getValue().SetAsJSONValue(AObject);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(1).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TCrud_AfterExecuteMethod_Metadata;
+    private DSRESTParameterMetaData[] get_TCrud_AfterExecuteMethod_Metadata() {
+      if (TCrud_AfterExecuteMethod_Metadata == null) {
+        TCrud_AfterExecuteMethod_Metadata = new DSRESTParameterMetaData[]{
+        };
       }
-      return returnObject;
+      return TCrud_AfterExecuteMethod_Metadata;
     }
-  };
 
-  /*
-   * @param ChannelId [in] - Type on server: string
-   * @param SecurityToken [in] - Type on server: string
-   * @return result - Type on server: Boolean
-   */
-  this.CloseClientChannel = function(ChannelId, SecurityToken) {
-    var returnObject = this.executor.executeMethod('CloseClientChannel', "GET", [ChannelId, SecurityToken], arguments[2], true, arguments[3], arguments[4]);
-    if (arguments[2] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ChannelId = ChannelId;
-        resultObject.SecurityToken = SecurityToken;
-        resultObject.result = resultArray[0];
-        return resultObject;
+    public void AfterExecuteMethod() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TCrud.AfterExecuteMethod");
+      cmd.prepare(get_TCrud_AfterExecuteMethod_Metadata());
+      getConnection().execute(cmd);
+      return;
+    }
+  }
+
+  public static class TDSProvider extends DSAdmin {
+    public TDSProvider(DSRESTConnection Connection) {
+      super(Connection);
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_Indikator_GetDSLookup_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_Indikator_GetDSLookup_Metadata() {
+      if (TDSProvider_Indikator_GetDSLookup_Metadata == null) {
+        TDSProvider_Indikator_GetDSLookup_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
       }
-      return returnObject;
+      return TDSProvider_Indikator_GetDSLookup_Metadata;
     }
-  };
 
-  this.CloseClientChannel_URL = function(ChannelId, SecurityToken) {
-    return this.executor.getMethodURL("CloseClientChannel", "GET", [ChannelId, SecurityToken], arguments[2])[0];
-  };
-
-  /*
-   * @param ChannelId [in] - Type on server: string
-   * @param CallbackId [in] - Type on server: string
-   * @param ChannelNames [in] - Type on server: string
-   * @param SecurityToken [in] - Type on server: string
-   * @return result - Type on server: Boolean
-   */
-  this.RegisterClientCallbackServer = function(ChannelId, CallbackId, ChannelNames, SecurityToken) {
-    var returnObject = this.executor.executeMethod('RegisterClientCallbackServer', "GET", [ChannelId, CallbackId, ChannelNames, SecurityToken], arguments[4], true, arguments[5], arguments[6]);
-    if (arguments[4] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ChannelId = ChannelId;
-        resultObject.CallbackId = CallbackId;
-        resultObject.ChannelNames = ChannelNames;
-        resultObject.SecurityToken = SecurityToken;
-        resultObject.result = resultArray[0];
-        return resultObject;
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet Indikator_GetDSLookup() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.Indikator_GetDSLookup");
+      cmd.prepare(get_TDSProvider_Indikator_GetDSLookup_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_Unit_GetDSLookup_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_Unit_GetDSLookup_Metadata() {
+      if (TDSProvider_Unit_GetDSLookup_Metadata == null) {
+        TDSProvider_Unit_GetDSLookup_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
       }
-      return returnObject;
+      return TDSProvider_Unit_GetDSLookup_Metadata;
     }
-  };
 
-  this.RegisterClientCallbackServer_URL = function(ChannelId, CallbackId, ChannelNames, SecurityToken) {
-    return this.executor.getMethodURL("RegisterClientCallbackServer", "GET", [ChannelId, CallbackId, ChannelNames, SecurityToken], arguments[4])[0];
-  };
-
-  /*
-   * @param ChannelId [in] - Type on server: string
-   * @param CallbackId [in] - Type on server: string
-   * @param SecurityToken [in] - Type on server: string
-   * @return result - Type on server: Boolean
-   */
-  this.UnregisterClientCallback = function(ChannelId, CallbackId, SecurityToken) {
-    var returnObject = this.executor.executeMethod('UnregisterClientCallback', "GET", [ChannelId, CallbackId, SecurityToken], arguments[3], true, arguments[4], arguments[5]);
-    if (arguments[3] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ChannelId = ChannelId;
-        resultObject.CallbackId = CallbackId;
-        resultObject.SecurityToken = SecurityToken;
-        resultObject.result = resultArray[0];
-        return resultObject;
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet Unit_GetDSLookup() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.Unit_GetDSLookup");
+      cmd.prepare(get_TDSProvider_Unit_GetDSLookup_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_Indikator_GetDSOverview_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_Indikator_GetDSOverview_Metadata() {
+      if (TDSProvider_Indikator_GetDSOverview_Metadata == null) {
+        TDSProvider_Indikator_GetDSOverview_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
       }
-      return returnObject;
+      return TDSProvider_Indikator_GetDSOverview_Metadata;
     }
-  };
 
-  this.UnregisterClientCallback_URL = function(ChannelId, CallbackId, SecurityToken) {
-    return this.executor.getMethodURL("UnregisterClientCallback", "GET", [ChannelId, CallbackId, SecurityToken], arguments[3])[0];
-  };
-
-  /*
-   * @param ChannelName [in] - Type on server: string
-   * @param Msg [in] - Type on server: TJSONValue
-   * @return result - Type on server: Boolean
-   */
-  this.BroadcastToChannel = function(ChannelName, Msg) {
-    var returnObject = this.executor.executeMethod('"BroadcastToChannel"', "POST", [ChannelName, Msg], arguments[2], true, arguments[3], arguments[4]);
-    if (arguments[2] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ChannelName = ChannelName;
-        resultObject.Msg = Msg;
-        resultObject.result = resultArray[0];
-        return resultObject;
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet Indikator_GetDSOverview() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.Indikator_GetDSOverview");
+      cmd.prepare(get_TDSProvider_Indikator_GetDSOverview_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_CPRSetting_GetDSLookup_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_CPRSetting_GetDSLookup_Metadata() {
+      if (TDSProvider_CPRSetting_GetDSLookup_Metadata == null) {
+        TDSProvider_CPRSetting_GetDSLookup_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
       }
-      return returnObject;
+      return TDSProvider_CPRSetting_GetDSLookup_Metadata;
     }
-  };
 
-  /*
-   * @param ChannelName [in] - Type on server: string
-   * @param Msg [in] - Type on server: TObject
-   * @return result - Type on server: Boolean
-   */
-  this.BroadcastObjectToChannel = function(ChannelName, Msg) {
-    var returnObject = this.executor.executeMethod('"BroadcastObjectToChannel"', "POST", [ChannelName, Msg], arguments[2], true, arguments[3], arguments[4]);
-    if (arguments[2] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ChannelName = ChannelName;
-        resultObject.Msg = Msg;
-        resultObject.result = resultArray[0];
-        return resultObject;
-      }
-      return returnObject;
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet CPRSetting_GetDSLookup() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.CPRSetting_GetDSLookup");
+      cmd.prepare(get_TDSProvider_CPRSetting_GetDSLookup_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
     }
-  };
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_CPR_GetDSLookup_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_CPR_GetDSLookup_Metadata() {
+      if (TDSProvider_CPR_GetDSLookup_Metadata == null) {
+        TDSProvider_CPR_GetDSLookup_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
+      }
+      return TDSProvider_CPR_GetDSLookup_Metadata;
+    }
 
-  /*
-   * @param ClientId [in] - Type on server: string
-   * @param CallbackId [in] - Type on server: string
-   * @param Msg [in] - Type on server: TJSONValue
-   * @param Response [out] - Type on server: TJSONValue
-   * @return result - Type on server: Boolean
-   */
-  this.NotifyCallback = function(ClientId, CallbackId, Msg) {
-    var returnObject = this.executor.executeMethod('"NotifyCallback"', "POST", [ClientId, CallbackId, Msg], arguments[3], true, arguments[4], arguments[5]);
-    if (arguments[3] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ClientId = ClientId;
-        resultObject.CallbackId = CallbackId;
-        resultObject.Msg = Msg;
-        resultObject.Response = resultArray[0];
-        resultObject.result = resultArray[1];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
-      }
-      return returnObject;
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet CPR_GetDSLookup() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.CPR_GetDSLookup");
+      cmd.prepare(get_TDSProvider_CPR_GetDSLookup_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
     }
-  };
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_Unit_GetDSOverview_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_Unit_GetDSOverview_Metadata() {
+      if (TDSProvider_Unit_GetDSOverview_Metadata == null) {
+        TDSProvider_Unit_GetDSOverview_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
+      }
+      return TDSProvider_Unit_GetDSOverview_Metadata;
+    }
 
-  /*
-   * @param ClientId [in] - Type on server: string
-   * @param CallbackId [in] - Type on server: string
-   * @param Msg [in] - Type on server: TObject
-   * @param Response [out] - Type on server: TObject
-   * @return result - Type on server: Boolean
-   */
-  this.NotifyObject = function(ClientId, CallbackId, Msg) {
-    var returnObject = this.executor.executeMethod('"NotifyObject"', "POST", [ClientId, CallbackId, Msg], arguments[3], true, arguments[4], arguments[5]);
-    if (arguments[3] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.ClientId = ClientId;
-        resultObject.CallbackId = CallbackId;
-        resultObject.Msg = Msg;
-        resultObject.Response = resultArray[0];
-        resultObject.result = resultArray[1];
-        if (returnObject.cacheId != null && returnObject.cmdIndex != null) {
-          resultObject._cacheId = returnObject.cacheId;
-          resultObject._cmdIndex = returnObject.cmdIndex;
-        }
-        return resultObject;
-      }
-      return returnObject;
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet Unit_GetDSOverview() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.Unit_GetDSOverview");
+      cmd.prepare(get_TDSProvider_Unit_GetDSOverview_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
     }
-  };
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_CPRSetting_GetDSOverview_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_CPRSetting_GetDSOverview_Metadata() {
+      if (TDSProvider_CPRSetting_GetDSOverview_Metadata == null) {
+        TDSProvider_CPRSetting_GetDSOverview_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
+      }
+      return TDSProvider_CPRSetting_GetDSOverview_Metadata;
+    }
+
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet CPRSetting_GetDSOverview() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.CPRSetting_GetDSOverview");
+      cmd.prepare(get_TDSProvider_CPRSetting_GetDSOverview_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSProvider_CPR_GetDSOverview_Metadata;
+    private DSRESTParameterMetaData[] get_TDSProvider_CPR_GetDSOverview_Metadata() {
+      if (TDSProvider_CPR_GetDSOverview_Metadata == null) {
+        TDSProvider_CPR_GetDSOverview_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.TableType, "TDataSet"),
+        };
+      }
+      return TDSProvider_CPR_GetDSOverview_Metadata;
+    }
+
+    /**
+     * @return result - Type on server: TDataSet
+     */
+    public TDataSet CPR_GetDSOverview() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSProvider.CPR_GetDSOverview");
+      cmd.prepare(get_TDSProvider_CPR_GetDSOverview_Metadata());
+      getConnection().execute(cmd);
+      return (TDataSet) cmd.getParameter(0).getValue().GetAsTable();
+    }
+  }
+
+  public static class TDSReport extends DSAdmin {
+    public TDSReport(DSRESTConnection Connection) {
+      super(Connection);
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSReport_DO_GetDSNP_Metadata;
+    private DSRESTParameterMetaData[] get_TDSReport_DO_GetDSNP_Metadata() {
+      if (TDSReport_DO_GetDSNP_Metadata == null) {
+        TDSReport_DO_GetDSNP_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("ANONP", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TFDJSONDataSets"),
+        };
+      }
+      return TDSReport_DO_GetDSNP_Metadata;
+    }
+
+    /**
+     * @param ANONP [in] - Type on server: string
+     * @return result - Type on server: TFDJSONDataSets
+     */
+    public TJSONObject DO_GetDSNP(String ANONP) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSReport.DO_GetDSNP");
+      cmd.prepare(get_TDSReport_DO_GetDSNP_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(ANONP);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(1).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSReport_DO_GetDS_CheckList_Metadata;
+    private DSRESTParameterMetaData[] get_TDSReport_DO_GetDS_CheckList_Metadata() {
+      if (TDSReport_DO_GetDS_CheckList_Metadata == null) {
+        TDSReport_DO_GetDS_CheckList_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("ANONP", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TFDJSONDataSets"),
+        };
+      }
+      return TDSReport_DO_GetDS_CheckList_Metadata;
+    }
+
+    /**
+     * @param ANONP [in] - Type on server: string
+     * @return result - Type on server: TFDJSONDataSets
+     */
+    public TJSONObject DO_GetDS_CheckList(String ANONP) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSReport.DO_GetDS_CheckList");
+      cmd.prepare(get_TDSReport_DO_GetDS_CheckList_Metadata());
+      cmd.getParameter(0).getValue().SetAsString(ANONP);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(1).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSReport_SO_ByDate_Metadata;
+    private DSRESTParameterMetaData[] get_TDSReport_SO_ByDate_Metadata() {
+      if (TDSReport_SO_ByDate_Metadata == null) {
+        TDSReport_SO_ByDate_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("StartDate", DSRESTParamDirection.Input, DBXDataTypes.DateTimeType, "TDateTime"),
+          new DSRESTParameterMetaData("EndDate", DSRESTParamDirection.Input, DBXDataTypes.DateTimeType, "TDateTime"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TFDJSONDataSets"),
+        };
+      }
+      return TDSReport_SO_ByDate_Metadata;
+    }
+
+    /**
+     * @param StartDate [in] - Type on server: TDateTime
+     * @param EndDate [in] - Type on server: TDateTime
+     * @return result - Type on server: TFDJSONDataSets
+     */
+    public TJSONObject SO_ByDate(Date StartDate, Date EndDate) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSReport.SO_ByDate");
+      cmd.prepare(get_TDSReport_SO_ByDate_Metadata());
+      cmd.getParameter(0).getValue().SetAsDateTime(StartDate);
+      cmd.getParameter(1).getValue().SetAsDateTime(EndDate);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(2).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSReport_SO_ByDateNoBukti_Metadata;
+    private DSRESTParameterMetaData[] get_TDSReport_SO_ByDateNoBukti_Metadata() {
+      if (TDSReport_SO_ByDateNoBukti_Metadata == null) {
+        TDSReport_SO_ByDateNoBukti_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("StartDate", DSRESTParamDirection.Input, DBXDataTypes.DateTimeType, "TDateTime"),
+          new DSRESTParameterMetaData("EndDate", DSRESTParamDirection.Input, DBXDataTypes.DateTimeType, "TDateTime"),
+          new DSRESTParameterMetaData("aNoBuktiAwal", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("aNoBuktiAkhir", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TFDJSONDataSets"),
+        };
+      }
+      return TDSReport_SO_ByDateNoBukti_Metadata;
+    }
+
+    /**
+     * @param StartDate [in] - Type on server: TDateTime
+     * @param EndDate [in] - Type on server: TDateTime
+     * @param aNoBuktiAwal [in] - Type on server: string
+     * @param aNoBuktiAkhir [in] - Type on server: string
+     * @return result - Type on server: TFDJSONDataSets
+     */
+    public TJSONObject SO_ByDateNoBukti(Date StartDate, Date EndDate, String aNoBuktiAwal, String aNoBuktiAkhir) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSReport.SO_ByDateNoBukti");
+      cmd.prepare(get_TDSReport_SO_ByDateNoBukti_Metadata());
+      cmd.getParameter(0).getValue().SetAsDateTime(StartDate);
+      cmd.getParameter(1).getValue().SetAsDateTime(EndDate);
+      cmd.getParameter(2).getValue().SetAsString(aNoBuktiAwal);
+      cmd.getParameter(3).getValue().SetAsString(aNoBuktiAkhir);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(4).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSReport_PO_SLIP_ByDateNoBukti_Metadata;
+    private DSRESTParameterMetaData[] get_TDSReport_PO_SLIP_ByDateNoBukti_Metadata() {
+      if (TDSReport_PO_SLIP_ByDateNoBukti_Metadata == null) {
+        TDSReport_PO_SLIP_ByDateNoBukti_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("StartDate", DSRESTParamDirection.Input, DBXDataTypes.DateTimeType, "TDateTime"),
+          new DSRESTParameterMetaData("EndDate", DSRESTParamDirection.Input, DBXDataTypes.DateTimeType, "TDateTime"),
+          new DSRESTParameterMetaData("aNoBuktiAwal", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("aNoBuktiAkhir", DSRESTParamDirection.Input, DBXDataTypes.WideStringType, "string"),
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TFDJSONDataSets"),
+        };
+      }
+      return TDSReport_PO_SLIP_ByDateNoBukti_Metadata;
+    }
+
+    /**
+     * @param StartDate [in] - Type on server: TDateTime
+     * @param EndDate [in] - Type on server: TDateTime
+     * @param aNoBuktiAwal [in] - Type on server: string
+     * @param aNoBuktiAkhir [in] - Type on server: string
+     * @return result - Type on server: TFDJSONDataSets
+     */
+    public TJSONObject PO_SLIP_ByDateNoBukti(Date StartDate, Date EndDate, String aNoBuktiAwal, String aNoBuktiAkhir) throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSReport.PO_SLIP_ByDateNoBukti");
+      cmd.prepare(get_TDSReport_PO_SLIP_ByDateNoBukti_Metadata());
+      cmd.getParameter(0).getValue().SetAsDateTime(StartDate);
+      cmd.getParameter(1).getValue().SetAsDateTime(EndDate);
+      cmd.getParameter(2).getValue().SetAsString(aNoBuktiAwal);
+      cmd.getParameter(3).getValue().SetAsString(aNoBuktiAkhir);
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(4).getValue().GetAsJSONValue();
+    }
+    
+    
+    private DSRESTParameterMetaData[] TDSReport_SO_Test_Metadata;
+    private DSRESTParameterMetaData[] get_TDSReport_SO_Test_Metadata() {
+      if (TDSReport_SO_Test_Metadata == null) {
+        TDSReport_SO_Test_Metadata = new DSRESTParameterMetaData[]{
+          new DSRESTParameterMetaData("", DSRESTParamDirection.ReturnValue, DBXDataTypes.JsonValueType, "TFDJSONDataSets"),
+        };
+      }
+      return TDSReport_SO_Test_Metadata;
+    }
+
+    /**
+     * @return result - Type on server: TFDJSONDataSets
+     */
+    public TJSONObject SO_Test() throws DBXException {
+      DSRESTCommand cmd = getConnection().CreateCommand();
+      cmd.setRequestType(DSHTTPRequestType.GET);
+      cmd.setText("TDSReport.SO_Test");
+      cmd.prepare(get_TDSReport_SO_Test_Metadata());
+      getConnection().execute(cmd);
+      return (TJSONObject) cmd.getParameter(0).getValue().GetAsJSONValue();
+    }
+  }
+
 }
-
-function TServerMethods1(connectionInfo)
-{
-  this.executor = new ServerFunctionExecutor("TServerMethods1",connectionInfo);
-
-  /*
-   * @param Value [in] - Type on server: string
-   * @return result - Type on server: string
-   */
-  this.EchoString = function(Value) {
-    var returnObject = this.executor.executeMethod("EchoString", "GET", [Value], arguments[1], true, arguments[2], arguments[3]);
-    if (arguments[1] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.Value = Value;
-        resultObject.result = resultArray[0];
-        return resultObject;
-      }
-      return returnObject;
-    }
-  };
-
-  this.EchoString_URL = function(Value) {
-    return this.executor.getMethodURL("EchoString", "GET", [Value], arguments[1])[0];
-  };
-
-  /*
-   * @param Value [in] - Type on server: string
-   * @return result - Type on server: string
-   */
-  this.ReverseString = function(Value) {
-    var returnObject = this.executor.executeMethod("ReverseString", "GET", [Value], arguments[1], true, arguments[2], arguments[3]);
-    if (arguments[1] == null) {
-      if (returnObject != null && returnObject.result != null && isArray(returnObject.result)) {
-        var resultArray = returnObject.result;
-        var resultObject = new Object();
-        resultObject.Value = Value;
-        resultObject.result = resultArray[0];
-        return resultObject;
-      }
-      return returnObject;
-    }
-  };
-
-  this.ReverseString_URL = function(Value) {
-    return this.executor.getMethodURL("ReverseString", "GET", [Value], arguments[1])[0];
-  };
-}
-
-var JSProxyClassList = {
-  "DSAdmin": ["GetPlatformName","ClearResources","FindPackages","FindClasses","FindMethods","CreateServerClasses","DropServerClasses","CreateServerMethods","DropServerMethods","GetServerClasses","ListClasses","DescribeClass","ListMethods","DescribeMethod","GetServerMethods","GetServerMethodParameters","GetDatabaseConnectionProperties","GetDSServerName","ConsumeClientChannel","ConsumeClientChannelTimeout","CloseClientChannel","RegisterClientCallbackServer","UnregisterClientCallback","BroadcastToChannel","BroadcastObjectToChannel","NotifyCallback","NotifyObject"],
-  "TServerMethods1": ["EchoString","ReverseString"]
-};
-
