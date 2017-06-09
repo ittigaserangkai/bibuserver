@@ -12,6 +12,8 @@ type
   TDSProvider = class(TComponent)
   private
   public
+    function Indikator_GetDS: TDataSet;
+    function Unit_GetDS: TDataSet;
 
 
 
@@ -136,6 +138,22 @@ end;
 function TDSReport.Test: Variant;
 begin
   Result := 'Wtf';
+end;
+
+function TDSProvider.Indikator_GetDS: TDataSet;
+var
+  S: string;
+begin
+  S := 'Select * from TIndikator';
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.Unit_GetDS: TDataSet;
+var
+  S: string;
+begin
+  S := 'Select * from TUnit';
+  Result := TDBUtils.OpenQuery(S);
 end;
 
 end.

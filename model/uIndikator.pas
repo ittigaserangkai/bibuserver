@@ -8,16 +8,16 @@ type
   TModIndikator = class(TModApp)
   private
     FKODE: string;
-    FNAMA: string;
+    FINDIKATOR: string;
     FUNITUSAHA : TModUnit;
   public
     class function GetTableName: String; override;
   published
     [AttributeOfCode]
     property KODE: string read FKODE write FKODE;
-    property NAMA: string read FNAMA write FNAMA;
+    property INDIKATOR: string read FINDIKATOR write FINDIKATOR;
 
-    [AttributeOfForeign]
+    [AttributeOfForeign('UNIT')]
     property UNITUSAHA: TModUnit read FUNITUSAHA write FUNITUSAHA;
 
   end;
@@ -29,7 +29,7 @@ implementation
 
 class function TModIndikator.GetTableName: String;
 begin
-  Result := 'TModIndikator';
+  Result := 'TIndikator';
 end;
 
 initialization

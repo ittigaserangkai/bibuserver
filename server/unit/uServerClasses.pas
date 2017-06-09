@@ -34,6 +34,7 @@ type
     function Retrieve(ModClassName, AID: string): TModApp; overload;
     function GenerateCustomNo(aTableName, aFieldName: string; aCountDigit: Integer
         = 11): String; overload;
+    function GenerateID: String;
     function GenerateNo(aClassName: string): String; overload;
     function RetrieveSingle(ModClassName, AID: string): TModApp; overload;
     function RetrieveByCode(ModClassName, aCode: string): TModApp; overload;
@@ -164,6 +165,11 @@ begin
   Result := RightStr(Result, aCountDigit);
 
   AfterExecuteMethod;
+end;
+
+function TCrud.GenerateID: String;
+begin
+  Result := TDBUtils.GetNextIDGUIDToString();
 end;
 
 function TCrud.GenerateNo(aClassName: string): String;
