@@ -98,13 +98,7 @@ type
     class function StrPadRight(const S: string; Len: Integer; C: Char): string;
     class function StrPadLeftCut(const S: String; Len: Integer; C: Char): String;
     class function StrRemoveChar(const S: String; const Source: Char): String;
-    //fungsi enkripsi
-    class function _Encrypt(const InString: AnsiString; START_KEY, MULTI_KEY,
-        ADD_KEY: Integer): AnsiString;
-    class function _Decrypt(const InString: AnsiString; START_KEY, MULTI_KEY,
-        ADD_KEY: Integer): AnsiString;
     class function _MakeReadable(Input: AnsiString): AnsiString;
-    class function _MakeOriginal(Input: AnsiString): AnsiString;
   end;
 
 procedure SetIDCurrencyRegionalSetting;
@@ -147,8 +141,8 @@ const
 
 implementation
 
-uses
-  uTSCommonDlg;
+//uses
+
 
 class function TAppUtils.GetAppVersionStr: string;
 var
@@ -622,10 +616,10 @@ end;
 class procedure TAppUtils.Information(const Text: string; UsingNativeDlg:
     Boolean = False);
 begin
-  If UsingNativeDlg then
-    MessageDlg(Text, mtInformation, [mbYes], 0)
-  else
-    CommonDlg.ShowInformationAlert('Informasi',Text,mtInformation);
+//  If UsingNativeDlg then
+//    MessageDlg(Text, mtInformation, [mbYes], 0)
+//  else
+//    CommonDlg.ShowInformationAlert('Informasi',Text,mtInformation);
 end;
 
 class procedure TAppUtils.InformationBerhasilHapus;
@@ -1076,42 +1070,6 @@ begin
       Result := Result + S[I];
 end;
 
-{
-  @author     : Anatoly Podgoretsky
-               Base alghoritm from Borland
-  @modified by: Martin Djernæs, Yogatama
-}
-class function TAppUtils._Encrypt(const InString: AnsiString; START_KEY,
-    MULTI_KEY, ADD_KEY: Integer): AnsiString;
-var
-  i: Byte;
-begin
-  Result := '';
-  for i := 1 to Length(InString) do
-  begin
-    Result := Result + Chr(Ord(InString[i]) xor (START_KEY shr 8));
-    START_KEY := (Ord(Result[i]) + START_KEY) * MULTI_KEY + ADD_KEY;
-  end;
-end;
-
-{
-  @author     : Anatoly Podgoretsky
-               Base alghoritm from Borland
-  @modified by: Martin Djernæs, Yogatama
-}
-class function TAppUtils._Decrypt(const InString: AnsiString; START_KEY,
-    MULTI_KEY, ADD_KEY: Integer): AnsiString;
-var
-  i: Byte;
-begin
-  Result := '';
-  for i := 1 to Length(InString) do
-  begin
-    Result := Result + Chr(Ord(InString[i]) xor (START_KEY shr 8));
-    START_KEY := (Ord(InString[i]) + START_KEY) * MULTI_KEY + ADD_KEY;
-  end;
-end;
-
 class function TAppUtils._MakeReadable(Input: AnsiString): AnsiString;
 const
   digit: array [0..15] of AnsiChar = ('0', '1', '2', '3', '4', '5', '6', '7',
@@ -1122,18 +1080,6 @@ begin
   Result := '';
   for i := 1 to Length(Input) do
     Result := Result + digit[Ord(Input[i]) shr 4] + digit[Ord(Input[i]) and $F];
-end;
-
-class function TAppUtils._MakeOriginal(Input: AnsiString): AnsiString;
-var
-  i: Byte;
-begin
-  Result := '';
-  i := 1;
-  while (i < Length(Input)) do begin
-    Result := Result + AnsiChar(StrToInt('$' + Input[i] + Input[i + 1]));
-    i := i + 2;
-  end;
 end;
 
 class function TAppUtils.GetEXEVersionData(const FileName: string): TEXEVersionData;

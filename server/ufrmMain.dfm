@@ -5435,7 +5435,6 @@ object frmMain: TfrmMain
     TabOrder = 1
     WordWrap = False
     OnChange = mmLogChange
-    ExplicitHeight = 217
   end
   object StatusBar1: TStatusBar
     Left = 0
