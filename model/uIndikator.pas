@@ -8,13 +8,13 @@ type
   TModIndikator = class(TModApp)
   private
     FKODE: string;
-    FINDIKATOR: string;
+    FNAMA: string;
   public
     class function GetTableName: String; override;
   published
     [AttributeOfCode]
     property KODE: string read FKODE write FKODE;
-    property INDIKATOR: string read FINDIKATOR write FINDIKATOR;
+    property NAMA: string read FNAMA write FNAMA;
 
   end;
 

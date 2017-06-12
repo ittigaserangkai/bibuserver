@@ -16,6 +16,14 @@ type
     function IndikatorByUnit_GetDS(aUnit: String): TDataSet;
     function LoadCPRByUnit(aUnit: string; aBulan, aTahun: Integer): TDataSet;
     function Unit_GetDS: TDataSet;
+    function Indikator_GetDSLookup: TDataSet;
+    function Unit_GetDSLookup: TDataSet;
+    function Indikator_GetDSOverview: TDataSet;
+    function CPRSetting_GetDSLookup: TDataSet;
+    function CPR_GetDSLookup: TDataSet;
+    function Unit_GetDSOverview: TDataSet;
+    function CPRSetting_GetDSOverview: TDataSet;
+    function CPR_GetDSOverview: TDataSet;
 
 
 
@@ -179,6 +187,82 @@ var
   S: string;
 begin
   S := 'Select * from TUnit';
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.Indikator_GetDSLookup: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM TIndikator';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.Unit_GetDSLookup: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM TUnit';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.Indikator_GetDSOverview: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM TIndikator';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.CPRSetting_GetDSLookup: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT A.id, b.KODE as UNITUSAHA, a.UNITUSAHA as UNITUSAHAID,' +
+       ' A.NAMA, A.ISACTIVE from TCPRSETTING a' +
+       ' inner join TUNIT b on a.UNITUSAHA = b.ID';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.CPR_GetDSLookup: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT A.id, b.KODE as UNITUSAHA, a.UNITUSAHA as UNITUSAHAID,' +
+       ' A.NAMA, A.ISACTIVE from TCPRSETTING a' +
+       ' inner join TUNIT b on a.UNITUSAHA = b.ID';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.Unit_GetDSOverview: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM TIndikator';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.CPRSetting_GetDSOverview: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM VIEW_CPRSETTING';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.CPR_GetDSOverview: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM VIEW_CPRSETTING';
+
   Result := TDBUtils.OpenQuery(S);
 end;
 
