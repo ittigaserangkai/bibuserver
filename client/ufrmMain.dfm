@@ -41,7 +41,7 @@ object frmMain: TfrmMain
         Height = 376
         Align = alClient
         TabOrder = 0
-        Properties.ActivePage = cxTSCPRSettingOverview
+        Properties.ActivePage = cxTSCPRInput
         Properties.CustomButtons.Buttons = <>
         ClientRectBottom = 372
         ClientRectLeft = 4
@@ -57,10 +57,6 @@ object frmMain: TfrmMain
             Height = 348
             Align = alClient
             TabOrder = 0
-            ExplicitLeft = 280
-            ExplicitTop = 72
-            ExplicitWidth = 250
-            ExplicitHeight = 200
             object cxGridDBTableCPRSettingOV: TcxGridDBTableView
               Navigator.Buttons.CustomButtons = <>
               OnCellDblClick = cxGridDBTableCPRSettingOVCellDblClick
@@ -152,11 +148,20 @@ object frmMain: TfrmMain
                 Caption = 'Kode'
                 PropertiesClassName = 'TcxExtLookupComboBoxProperties'
                 Properties.OnValidate = cxgrdclmnCPRSettingColumnIndikatorPropertiesValidate
+                HeaderAlignmentHorz = taCenter
               end
               object cxgrdclmnCPRSettingColumnNama: TcxGridColumn
                 AlternateCaption = 'ID'
                 Caption = 'Nama'
                 PropertiesClassName = 'TcxExtLookupComboBoxProperties'
+                HeaderAlignmentHorz = taCenter
+              end
+              object cxgrdclmnCPRSettingColumnUrutan: TcxGridColumn
+                AlternateCaption = 'Urutan'
+                Caption = 'Urutan'
+                PropertiesClassName = 'TcxTextEditProperties'
+                Properties.OnValidate = cxgrdclmnCPRSettingColumnUrutanPropertiesValidate
+                HeaderAlignmentHorz = taCenter
               end
             end
             object cxgrdlvlCPRSetting: TcxGridLevel
@@ -184,9 +189,6 @@ object frmMain: TfrmMain
       Caption = 'Simpan'
       TabOrder = 0
       OnClick = bSimpanClick
-      ExplicitLeft = 728
-      ExplicitTop = 6
-      ExplicitHeight = 25
     end
     object bClear: TcxButton
       Left = 668
@@ -197,9 +199,6 @@ object frmMain: TfrmMain
       Caption = 'Clear'
       TabOrder = 1
       OnClick = bClearClick
-      ExplicitLeft = 647
-      ExplicitTop = 6
-      ExplicitHeight = 25
     end
     object bRefresh: TcxButton
       Left = 1
@@ -210,9 +209,6 @@ object frmMain: TfrmMain
       Caption = 'Refresh'
       TabOrder = 2
       OnClick = bRefreshClick
-      ExplicitLeft = 15
-      ExplicitTop = 6
-      ExplicitHeight = 25
     end
     object bDelete: TcxButton
       Left = 593
@@ -223,9 +219,6 @@ object frmMain: TfrmMain
       Caption = 'Delete'
       TabOrder = 3
       OnClick = bDeleteClick
-      ExplicitLeft = 647
-      ExplicitTop = 6
-      ExplicitHeight = 25
     end
   end
 end

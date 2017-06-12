@@ -12,6 +12,7 @@ type
   private
     FCPRSetting: TModCPRSetting;
     FIndikator: TModIndikator;
+    FUrutan: Integer;
   public
     [AttributeOfHeader]
     class function GetTableName: string; override;
@@ -19,6 +20,7 @@ type
     [AttributeOfHeader]
     property CPRSetting: TModCPRSetting read FCPRSetting write FCPRSetting;
     property Indikator: TModIndikator read FIndikator write FIndikator;
+    property Urutan: Integer read FUrutan write FUrutan;
   end;
 
   TModCPRSetting = class(TModApp)
