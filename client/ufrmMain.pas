@@ -45,6 +45,7 @@ type
     cxGridDBTableCPRSettingOV: TcxGridDBTableView;
     cxgrdlvlCPRSettingLvl: TcxGridLevel;
     bDelete: TcxButton;
+    cxgrdclmnCPRSettingColumnUrutan: TcxGridColumn;
     procedure ADPBind1CreateAdapter(Sender: TObject;
       var ABindSourceAdapter: TBindSourceAdapter);
     procedure bClearClick(Sender: TObject);
@@ -60,6 +61,8 @@ type
         TShiftState; var AHandled: Boolean);
     procedure cxGridDBTableCPRSettingOVEditing(Sender: TcxCustomGridTableView;
         AItem: TcxCustomGridTableItem; var AAllow: Boolean);
+    procedure cxgrdclmnCPRSettingColumnUrutanPropertiesValidate(Sender: TObject;
+      var DisplayValue: Variant; var ErrorText: TCaption; var Error: Boolean);
   private
     FCDSCPRSEttingIndikator: TClientDataset;
     FCDSCPRSettingOverview: TClientDataset;
@@ -144,6 +147,20 @@ var
 begin
   iBaris := cxgrdtblvwCPRSetting.DataController.FocusedRecordIndex;
   cxgrdtblvwCPRSetting.DataController.Values[iBaris, cxgrdclmnCPRSettingColumnNama.Index] := FCDSCPRSEttingIndikator.FieldByName('id').AsString;
+end;
+
+procedure TfrmMain.cxgrdclmnCPRSettingColumnUrutanPropertiesValidate(
+  Sender: TObject; var DisplayValue: Variant; var ErrorText: TCaption;
+  var Error: Boolean);
+var
+  iAngka: Integer;
+begin
+  if not TryStrToInt(DisplayValue, iAngka) then
+  begin
+    Error := True;
+    ErrorText := 'Urutan harus data numeric';
+  end;
+
 end;
 
 procedure TfrmMain.cxGridDBTableCPRSettingOVCellDblClick(Sender:
@@ -249,6 +266,7 @@ begin
     cxgrdtblvwCPRSetting.DataController.AppendRecord;
     cxgrdtblvwCPRSetting.SetValue(i,cxgrdclmnCPRSettingColumnIndikator.Index, CPRSetting.CPRSettingItems[i].Indikator.ID);
     cxgrdtblvwCPRSetting.SetValue(i,cxgrdclmnCPRSettingColumnNama.Index, CPRSetting.CPRSettingItems[i].Indikator.ID);
+    cxgrdtblvwCPRSetting.SetValue(i,cxgrdclmnCPRSettingColumnUrutan.Index, CPRSetting.CPRSettingItems[i].Urutan);
   end;
 
   Result := True;
@@ -279,6 +297,7 @@ begin
   begin
     lCPRSettingItem := TModCPRSettingItem.Create();
     lCPRSettingItem.Indikator := TModIndikator.CreateID(cxgrdtblvwCPRSetting.DataController.Values[i, cxgrdclmnCPRSettingColumnIndikator.Index]);
+    lCPRSettingItem.Urutan    := cxgrdtblvwCPRSetting.Int(i, cxgrdclmnCPRSettingColumnUrutan.Index);
     CPRSetting.CPRSettingItems.Add(lCPRSettingItem);
   end;
 
