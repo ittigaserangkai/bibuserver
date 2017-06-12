@@ -15,6 +15,7 @@ type
     FUrutan: Integer;
   public
 
+    function GetOrderByField: string; override;
     class function GetTableName: string; override;
   published
     [AttributeOfHeader]
@@ -127,6 +128,11 @@ end;
 class function TModCPR.GetTableName: string;
 begin
   Result := 'TModCPR';
+end;
+
+function TModCPRSettingItem.GetOrderByField: string;
+begin
+  Result := 'urutan';
 end;
 
 { TModCPRSettingItem }
