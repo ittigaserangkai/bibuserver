@@ -242,10 +242,18 @@ end;
 function TModApp.QuotValue(AProp: TRttiProperty): String;
 var
   lDate: TDateTime;
+//  lDebug: Double;
+//  lDebug2: Double;
   lObj: TObject;
 begin
   If LowerCase(AProp.PropertyType.Name) = LowerCase('TDateTime') then
   begin
+//    lDebug := AProp.GetValue(Self).AsExtended;
+//    lDate := Now();
+//    lDebug2 := lDate;
+//    if lDebug <> lDebug2 then
+//      lDebug := lDebug2;
+
     lDate := AProp.GetValue(Self).AsExtended;
     Result := QuotedStr(FormatDateTime('yyyy-mm-dd hh:mm:ss',lDate));
   end else begin

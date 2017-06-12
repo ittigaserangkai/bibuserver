@@ -13,6 +13,8 @@ type
   private
   public
     function Indikator_GetDS: TDataSet;
+    function IndikatorByUnit_GetDS(aUnit: String): TDataSet;
+    function LoadCPRByUnit(aUnit: string; aBulan, aTahun: Integer): TDataSet;
     function Unit_GetDS: TDataSet;
 
 
@@ -145,6 +147,30 @@ var
   S: string;
 begin
   S := 'Select * from TIndikator';
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.IndikatorByUnit_GetDS(aUnit: String): TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT C.ID, C.INDIKATOR FROM TCPRSETTING A'
+      +' INNER JOIN TCPRSETTINGITEM B ON A.ID=B.CPRSETTING'
+      +' INNER JOIN TINDIKATOR C ON C.ID=B.INDIKATOR'
+      +' WHERE A.UNITUSAHA=' + QuotedStr(aUnit)
+      +' ORDER BY C.KODE';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.LoadCPRByUnit(aUnit: string; aBulan, aTahun: Integer):
+    TDataSet;
+var
+  S: string;
+begin
+  S := 'Select * from FN_LoadCPR(' + QuotedStr(aUnit)
+    + ',' + IntTostr(aBulan) + ',' + IntToStr(aTahun) + ')';
+
   Result := TDBUtils.OpenQuery(S);
 end;
 

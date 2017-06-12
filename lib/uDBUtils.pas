@@ -244,6 +244,7 @@ end;
 class procedure TDBUtils.GenerateSQL(AObject: TModApp; SS: TStrings);
 var
   a: TCustomAttribute;
+  arCount: Integer;
   ctx : TRttiContext;
   DoUpdateDetails: Boolean;
   meth : TRttiMethod;
@@ -313,7 +314,8 @@ begin
         IDItems := '';
         SSItems := TStringList.Create;
         Try
-          for i := 0 to value.GetArrayLength - 1 do
+          arCount := value.GetArrayLength; //debug purpose
+          for i := 0 to arCount - 1 do
           begin
             lObj := value.GetArrayElement(i).AsObject;
             If not lObj.ClassType.InheritsFrom(TModApp) then continue;  //bila ada generic selain class ini

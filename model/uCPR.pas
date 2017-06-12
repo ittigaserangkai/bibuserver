@@ -16,6 +16,7 @@ type
     [AttributeOfHeader]
     class function GetTableName: string; override;
   published
+    [AttributeOfHeader]
     property CPRSetting: TModCPRSetting read FCPRSetting write FCPRSetting;
     property Indikator: TModIndikator read FIndikator write FIndikator;
   end;
@@ -43,22 +44,22 @@ type
     FCPRItems: TObjectList<TModCPRItem>;
     FCrusialIssues: string;
     FMinggu: Integer;
-    FStrategeySolusi: string;
+    FStrategySolusi: string;
     FTahun: Integer;
-    FTglInput: TDatetime;
+    FTanggalInput: TDatetime;
     FUnitUsaha: TModUnit;
     function GetCPRItems: TObjectList<TModCPRItem>;
   public
     [AttributeOfHeader]
     class function GetTableName: string; override;
+    property CPRItems: TObjectList<TModCPRItem> read GetCPRItems write FCPRItems;
   published
     property Bulan: Integer read FBulan write FBulan;
-    property CPRItems: TObjectList<TModCPRItem> read GetCPRItems write FCPRItems;
     property CrusialIssues: string read FCrusialIssues write FCrusialIssues;
     property Minggu: Integer read FMinggu write FMinggu;
-    property StrategeySolusi: string read FStrategeySolusi write FStrategeySolusi;
+    property StrategySolusi: string read FStrategySolusi write FStrategySolusi;
     property Tahun: Integer read FTahun write FTahun;
-    property TglInput: TDatetime read FTglInput write FTglInput;
+    property TanggalInput: TDatetime read FTanggalInput write FTanggalInput;
     property UnitUsaha: TModUnit read FUnitUsaha write FUnitUsaha;
   end;
 
@@ -121,7 +122,7 @@ end;
 }
 class function TModCPR.GetTableName: string;
 begin
-  Result := 'TModCPR';
+  Result := 'TCPR';
 end;
 
 { TModCPRSettingItem }
@@ -141,7 +142,13 @@ end;
 }
 class function TModCPRItem.GetTableName: string;
 begin
-  Result := 'TModCPRItem';
+  Result := 'TCPRItem';
 end;
+
+initialization
+  TModCPR.RegisterRTTI;
+  TModCPRItem.RegisterRTTI;
+  TModCPRSetting.RegisterRTTI;
+  TModCPRSettingItem.RegisterRTTI;
 
 end.

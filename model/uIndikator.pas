@@ -9,16 +9,12 @@ type
   private
     FKODE: string;
     FINDIKATOR: string;
-    FUNITUSAHA : TModUnit;
   public
     class function GetTableName: String; override;
   published
     [AttributeOfCode]
     property KODE: string read FKODE write FKODE;
     property INDIKATOR: string read FINDIKATOR write FINDIKATOR;
-
-    [AttributeOfForeign('UNIT')]
-    property UNITUSAHA: TModUnit read FUNITUSAHA write FUNITUSAHA;
 
   end;
 
