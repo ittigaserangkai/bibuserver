@@ -5371,7 +5371,7 @@ object frmMain: TfrmMain
         TabOrder = 1
         OnClick = ButtonStopClick
       end
-      object EditPort: TEdit
+      object edRestPort: TEdit
         Left = 45
         Top = 22
         Width = 121
@@ -5453,9 +5453,6 @@ object frmMain: TfrmMain
     TabOrder = 3
     Visible = False
     OnClick = btnTestClick
-    ExplicitLeft = 307
-    ExplicitTop = 288
-    ExplicitWidth = 75
   end
   object AE: TApplicationEvents
     OnIdle = AEIdle
@@ -5463,8 +5460,8 @@ object frmMain: TfrmMain
     Top = 8
   end
   object ImageList1: TImageList
-    Left = 552
-    Top = 80
+    Left = 464
+    Top = 65520
   end
   object mmMainMenu: TMainMenu
     Left = 776

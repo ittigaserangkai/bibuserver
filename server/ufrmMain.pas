@@ -19,7 +19,7 @@ type
     Label1: TLabel;
     ButtonStart: TButton;
     ButtonStop: TButton;
-    EditPort: TEdit;
+    edRestPort: TEdit;
     ButtonOpenBrowser: TButton;
     grpDB: TGroupBox;
     lblServer: TLabel;
@@ -84,7 +84,7 @@ procedure TfrmMain.AEIdle(Sender: TObject; var Done: Boolean);
 begin
   ButtonStart.Enabled := not FServer.Active;
   ButtonStop.Enabled  := FServer.Active;
-  EditPort.Enabled    := not FServer.Active;
+  edRestPort.Enabled  := not FServer.Active;
 end;
 
 procedure TfrmMain.ButtonOpenBrowserClick(Sender: TObject);
@@ -92,7 +92,7 @@ var
   LURL: string;
 begin
   StartServer;
-  LURL := Format('http://localhost:%s', [EditPort.Text]);
+  LURL := Format('http://localhost:%s', [edRestPort.Text]);
   ShellExecute(0,
         nil,
         PChar(LURL), nil, nil, SW_SHOWNOACTIVATE);
@@ -191,7 +191,11 @@ begin
     edUser.Text         := BacaRegistry('User_Name');
     edPassword.Text     := BacaRegistry('Password');
     edPort.Text         := BacaRegistry('Port');
+    edRestPort.Text     := BacaRegistry('RestPort');
+    if edRestPort.Text = '' then
+      edRestPort.Text  := '8080';
   end;
+
 
   StartServer;
 
@@ -222,9 +226,11 @@ begin
   if not FServer.Active then
   begin
     FServer.Bindings.Clear;
-    FServer.DefaultPort := StrToInt(EditPort.Text);
+    FServer.DefaultPort := StrToInt(edRestPort.Text);
     FServer.Active      := True;
     DSServer.Start;
+
+    TulisRegistry('RestPort',edRestPort.Text);
     HTTPMemo.Lines.Add('Server Started');
   end;
 end;

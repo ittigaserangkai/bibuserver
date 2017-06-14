@@ -24,6 +24,7 @@ type
     function Unit_GetDSOverview: TDataSet;
     function CPRSetting_GetDSOverview: TDataSet;
     function CPR_GetDSOverview: TDataSet;
+    function Embedded_GetDS: TDataSet;
 
 
 
@@ -263,6 +264,14 @@ var
 begin
   S := 'SELECT * FROM VIEW_CPRSETTING';
 
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.Embedded_GetDS: TDataSet;
+var
+  S: string;
+begin
+  S := 'Select * from TEmbeddedReport';
   Result := TDBUtils.OpenQuery(S);
 end;
 

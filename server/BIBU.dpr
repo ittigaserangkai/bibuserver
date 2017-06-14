@@ -19,7 +19,8 @@ uses
   uIndikator in '..\model\uIndikator.pas',
   uUnit in '..\model\uUnit.pas',
   uCPR in '..\model\uCPR.pas',
-  uServerClasses in 'unit\uServerClasses.pas';
+  uServerClasses in 'unit\uServerClasses.pas',
+  uEmbedded in '..\model\uEmbedded.pas';
 
 {$R *.res}
 
