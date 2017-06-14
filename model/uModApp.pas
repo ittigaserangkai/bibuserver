@@ -58,6 +58,7 @@ type
     function GetHeaderField: String;
     function GetHeaderKey: String;
     function GetHeaderProperty: String;
+    function GetOrderByField: string; virtual;
     class function GetPrimaryField: String; dynamic;
     class function GetTableName: String; dynamic;
     function PropFromAttr(attr: TAttributeClass; WithException: Boolean = True):
@@ -195,6 +196,11 @@ begin
   Result := '';
   lProp := PropFromAttr(AttributeOfHeader);
   if Assigned(lProp) then Result := lProp.Name;
+end;
+
+function TModApp.GetOrderByField: string;
+begin
+  Result := '';
 end;
 
 class function TModApp.GetPrimaryField: String;

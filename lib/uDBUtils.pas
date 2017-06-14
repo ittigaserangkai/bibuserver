@@ -854,6 +854,10 @@ begin
               sSQL := 'select * from ' + lAppObjectItem.GetTableName
                     + ' where ' + lAppObjectItem.GetHeaderField
                     + ' = ' + QuotedStr(ADataSet.FieldByName(AOBject.GetPrimaryField).AsString);
+
+              if lAppObjectItem.GetOrderByField <> '' then
+                sSQL := sSQL + ' order by ' + lAppObjectItem.GetOrderByField;
+
               lAppObjectItem.Free;
               QQ := TDBUtils.OpenQuery(sSQL, nil);
 
