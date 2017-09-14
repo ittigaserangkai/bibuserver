@@ -54,9 +54,9 @@ type
     function GetCPRItems: TObjectList<TModCPRItem>;
   public
     class function GetTableName: string; override;
+    property CPRItems: TObjectList<TModCPRItem> read GetCPRItems write FCPRItems;
   published
     property Bulan: Integer read FBulan write FBulan;
-    property CPRItems: TObjectList<TModCPRItem> read GetCPRItems write FCPRItems;
     property CrusialIssues: string read FCrusialIssues write FCrusialIssues;
     property Minggu: Integer read FMinggu write FMinggu;
     property StrategeySolusi: string read FStrategeySolusi write FStrategeySolusi;

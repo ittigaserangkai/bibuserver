@@ -16,11 +16,12 @@ uses
   uDSUtils in '..\lib\uDSUtils.pas',
   uTSINIFile in '..\lib\uTSINIFile.pas',
   uServerDSProvider in 'unit\uServerDSProvider.pas',
-  uIndikator in '..\model\uIndikator.pas',
   uUnit in '..\model\uUnit.pas',
   uCPR in '..\model\uCPR.pas',
   uServerClasses in 'unit\uServerClasses.pas',
-  uEmbedded in '..\model\uEmbedded.pas';
+  uEmbedded in '..\model\uEmbedded.pas',
+  uIndikator in '..\model\uIndikator.pas',
+  uUser in '..\model\uUser.pas';
 
 {$R *.res}
 

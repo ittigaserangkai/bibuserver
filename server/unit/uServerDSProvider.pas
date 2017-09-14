@@ -5,7 +5,7 @@ uses
   System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
   StrUtils, System.Generics.Collections, Data.FireDACJSONReflect,
   FireDAC.Stan.Storage, FireDAC.Stan.StorageBin, uServerClasses,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client, uUser;
 
 type
   {$METHODINFO ON}
@@ -25,6 +25,7 @@ type
     function CPRSetting_GetDSOverview: TDataSet;
     function CPR_GetDSOverview: TDataSet;
     function Embedded_GetDS: TDataSet;
+    function User_GetDS: TDataSet;
 
 
 
@@ -271,7 +272,15 @@ function TDSProvider.Embedded_GetDS: TDataSet;
 var
   S: string;
 begin
-  S := 'Select * from TEmbeddedReport';
+  S := 'Select * from TEmbeddedReport order by orderindex';
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.User_GetDS: TDataSet;
+var
+  S: string;
+begin
+  S := 'Select * from TUser';
   Result := TDBUtils.OpenQuery(S);
 end;
 

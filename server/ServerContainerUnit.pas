@@ -69,7 +69,7 @@ end;
 procedure TServerContainer.RegisterServerClasses;
 begin
   Assert(DSServer.Started = false, 'Server Active.' + #13 + 'Can''t add class to Active Server.');
-  TCustServerClass.Create(Self, DSServer, TTestMethod, DSServerClass.LifeCycle);
+  TCustServerClass.Create(Self, DSServer, TUser, DSServerClass.LifeCycle);
   TCustServerClass.Create(Self, DSServer, TCrud, DSServerClass.LifeCycle);
   TCustServerClass.Create(Self, DSServer, TDSProvider, DSServerClass.LifeCycle);
   TCustServerClass.Create(Self, DSServer, TDSReport, DSServerClass.LifeCycle);

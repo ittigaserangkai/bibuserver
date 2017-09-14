@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
-  StrUtils, Datasnap.DBClient;
+  StrUtils, Datasnap.DBClient, uUser;
 
 type
   {$METHODINFO ON}
@@ -13,9 +13,9 @@ type
     procedure AfterExecuteMethod;
   end;
 
-  TTestMethod = class(TComponent)
+  TUser = class(TComponent)
   public
-    function Hallo(aTanggal: TDateTime): String;
+    function GetLoginUser(aUserName, aPassword: String): TModUser;
   end;
 
   TCrud = class(TBaseServerClass)
@@ -53,10 +53,35 @@ const
 implementation
 
 uses
-  System.Generics.Collections, Datasnap.DSSession, Data.DBXPlatform;
-function TTestMethod.Hallo(aTanggal: TDateTime): String;
+  System.Generics.Collections, Datasnap.DSSession, Data.DBXPlatform, uUnit;
+
+function TUser.GetLoginUser(aUserName, aPassword: String): TModUser;
+var
+  lCrud: TCrud;
+  lDataset: TDataSet;
+  S: string;
+  sID: string;
 begin
-  Result := 'Hello Word ' + DateToStr(aTanggal);
+  Result := nil;
+
+  S := 'SELECT * from TUSER'
+      +' WHERE USERNAME =' + QuotedStr(aUserName)
+      +' AND PASSWORD =' + QuotedStr(aPassword);
+
+  lDataset := TDBUtils.OpenQuery(S);
+  lCrud := TCrud.Create(Self);
+  try
+    if not lDataset.eof then
+    begin
+      sID := lDataset.FieldByname('ID').AsString;
+      Result := lCrud.Retrieve(TModUser.ClassName, sID) as TModUser;
+    end;
+  finally
+    lCrud.Free;
+    lDataset.free;
+  end;
+
+
 end;
 
 function TCrud.BeforeSaveToDB(AObject: TModApp): Boolean;
@@ -71,9 +96,12 @@ end;
 
 function TCrud.SaveToDB(AObject: TModApp): Boolean;
 var
+  lModUser: TModUser;
   lSS: TStrings;
 begin
   Result := False;
+  lModUser := TModUser(AObject);
+
   if not ValidateCode(AObject) then exit;
   if not BeforeSaveToDB(AObject) then exit;
   lSS := TDBUtils.GenerateSQL(AObject);

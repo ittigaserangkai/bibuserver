@@ -137,7 +137,6 @@ begin
 
     Result := True;
   end;
-
 end;
 
 class function TDBUtils.CreateObjectDataSet(aObjectClass: TModAppClass; aOwner:
