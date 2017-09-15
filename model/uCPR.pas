@@ -47,9 +47,9 @@ type
     FCPRItems: TObjectList<TModCPRItem>;
     FCrusialIssues: string;
     FMinggu: Integer;
-    FStrategeySolusi: string;
+    FStrategySolusi: string;
     FTahun: Integer;
-    FTglInput: TDatetime;
+    FTanggalInput: TDatetime;
     FUnitUsaha: TModUnit;
     function GetCPRItems: TObjectList<TModCPRItem>;
   public
@@ -59,9 +59,9 @@ type
     property Bulan: Integer read FBulan write FBulan;
     property CrusialIssues: string read FCrusialIssues write FCrusialIssues;
     property Minggu: Integer read FMinggu write FMinggu;
-    property StrategeySolusi: string read FStrategeySolusi write FStrategeySolusi;
+    property StrategySolusi: string read FStrategySolusi write FStrategySolusi;
     property Tahun: Integer read FTahun write FTahun;
-    property TglInput: TDatetime read FTglInput write FTglInput;
+    property TanggalInput: TDatetime read FTanggalInput write FTanggalInput;
 
     [AttributeOfForeign]
     property UnitUsaha: TModUnit read FUnitUsaha write FUnitUsaha;
@@ -127,7 +127,7 @@ end;
 }
 class function TModCPR.GetTableName: string;
 begin
-  Result := 'TModCPR';
+  Result := 'TCPR';
 end;
 
 function TModCPRSettingItem.GetOrderByField: string;
@@ -152,7 +152,13 @@ end;
 }
 class function TModCPRItem.GetTableName: string;
 begin
-  Result := 'TModCPRItem';
+  Result := 'TCPRItem';
 end;
+
+initialization
+  TModCPR.RegisterRTTI;
+  TModCPRSettingItem.RegisterRTTI;
+  TModCPRSettingItem.RegisterRTTI;
+  TModCPRItem.RegisterRTTI;
 
 end.
