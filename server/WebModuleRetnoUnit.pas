@@ -104,9 +104,9 @@ procedure TWebModuleRetno.WebModuleBeforeDispatch(Sender: TObject;
 begin
   Response.SetCustomHeader('Access-Control-Allow-Origin','*');
 
-  if Trim(Request.GetFieldByName('Access-Control-Request-Headers')) <> '' then
+  if Trim(string(Request.GetFieldByName('Access-Control-Request-Headers'))) <> '' then
   begin
-    Response.SetCustomHeader('Access-Control-Allow-Headers', Request.GetFieldByName('Access-Control-Request-Headers'));
+    Response.SetCustomHeader('Access-Control-Allow-Headers', string(Request.GetFieldByName('Access-Control-Request-Headers')));
     Handled := True;
   end;
 

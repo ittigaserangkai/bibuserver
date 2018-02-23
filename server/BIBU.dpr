@@ -21,7 +21,9 @@ uses
   uServerClasses in 'unit\uServerClasses.pas',
   uEmbedded in '..\model\uEmbedded.pas',
   uIndikator in '..\model\uIndikator.pas',
-  uUser in '..\model\uUser.pas';
+  uUser in '..\model\uUser.pas',
+  uMR in '..\model\uMR.pas',
+  uMRGroupReport in '..\model\uMRGroupReport.pas';
 
 {$R *.res}
 

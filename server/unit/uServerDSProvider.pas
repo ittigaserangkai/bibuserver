@@ -23,8 +23,12 @@ type
     function CPR_GetDSLookup: TDataSet;
     function Unit_GetDSOverview: TDataSet;
     function CPRSetting_GetDSOverview: TDataSet;
+    function MRGroup_GetDSOverview: TDataSet;
     function CPR_GetDSOverview: TDataSet;
     function Embedded_GetDS: TDataSet;
+    function MRGroup_GetDSLookUp: TDataSet;
+    function MRGroupItem_GetDSLookUp: TDataSet;
+    function MRGroupItem_GetDSOverview: TDataSet;
     function User_GetDS: TDataSet;
 
 
@@ -259,6 +263,15 @@ begin
   Result := TDBUtils.OpenQuery(S);
 end;
 
+function TDSProvider.MRGroup_GetDSOverview: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM TMRGroupReport order by kode';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
 function TDSProvider.CPR_GetDSOverview: TDataSet;
 var
   S: string;
@@ -273,6 +286,33 @@ var
   S: string;
 begin
   S := 'Select * from TEmbeddedReport order by orderindex';
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.MRGroup_GetDSLookUp: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM TMRGroupReport order by kode';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.MRGroupItem_GetDSLookUp: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM TMRGroupReport order by kode';
+
+  Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.MRGroupItem_GetDSOverview: TDataSet;
+var
+  S: string;
+begin
+  S := 'SELECT * FROM VIEW_GROUPREPORTITEM order by kode';
+
   Result := TDBUtils.OpenQuery(S);
 end;
 
