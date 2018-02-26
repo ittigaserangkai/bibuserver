@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
-  StrUtils, Datasnap.DBClient, uUser;
+  StrUtils, Datasnap.DBClient, uUser, System.JSON, uJSONUtils;
 
 type
   {$METHODINFO ON}
@@ -41,6 +41,19 @@ type
     function SaveToDBLog(AObject: TModApp): Boolean;
     function SaveToDBID(AObject: TModApp): String;
     function TestGenerateSQL(AObject: TModApp): TStrings;
+  end;
+
+type
+  TJSONCRUD = class(TBaseServerClass)
+  private
+    FCRUD: TCrud;
+  protected
+    function GetCRUD: TCrud;
+    function StringToClass(ModClassName: string): TModAppClass;
+    property CRUD: TCrud read GetCRUD write FCRUD;
+  public
+    function Retrieve(AClassName, AID: String): TJSONObject;
+    function SaveToDB(AJSON: TJSONObject): TJSONObject;
   end;
 
 
@@ -345,6 +358,67 @@ procedure TBaseServerClass.AfterExecuteMethod;
 begin
   if CloseSession then
     GetInvocationMetaData.CloseSession := True;
+end;
+
+function TJSONCRUD.GetCRUD: TCrud;
+begin
+  if not Assigned(FCRUD) then
+    FCRUD := TCrud.Create(Self);
+  Result := FCRUD;
+end;
+
+function TJSONCRUD.Retrieve(AClassName, AID: String): TJSONObject;
+var
+  lModApp: TModApp;
+begin
+  lModApp := Self.CRUD.Retrieve(AClassName, AID);
+  try
+    Result := TJSONUtils.ModelToJSON(lModApp);
+  finally
+    lModApp.Free;
+  end;
+end;
+
+function TJSONCRUD.SaveToDB(AJSON: TJSONObject): TJSONObject;
+var
+  AClassName: string;
+  lClass: TModAppClass;
+  LJSVal: TJSONValue;
+  lModApp: TModApp;
+begin
+//  LJSVal  := AJSON.GetValue('ClassName');
+  lJSVal := TJSONUtils.GetValue(AJSON, 'ClassName');
+  if LJSVal = nil then
+    Raise Exception.Create('ClassName can''t be found in JSON Body');
+  AClassName := LJSVal.Value;
+  lClass  := StringToClass(AClassName);
+  lModApp := TJSONUtils.JSONToModel(AJSON, lClass);
+  Self.CRUD.SaveToDB(lModApp);
+  try
+    Result := TJSONUtils.ModelToJSON(lModApp);
+  finally
+    lModApp.Free;
+  end;
+end;
+
+function TJSONCRUD.StringToClass(ModClassName: string): TModAppClass;
+var
+  ctx: TRttiContext;
+  typ: TRttiType;
+  list: TArray<TRttiType>;
+begin
+  Result := nil;
+  ctx := TRttiContext.Create;
+  list := ctx.GetTypes;
+  for typ in list do
+  begin
+    if typ.IsInstance and (EndsText(ModClassName, typ.Name)) then
+    begin
+      Result := TModAppClass(typ.AsInstance.MetaClassType);
+      break;
+    end;
+  end;
+  ctx.Free;
 end;
 
 
