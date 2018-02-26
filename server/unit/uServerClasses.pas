@@ -100,7 +100,6 @@ var
   lSS: TStrings;
 begin
   Result := False;
-  lModUser := TModUser(AObject);
 
   if not ValidateCode(AObject) then exit;
   if not BeforeSaveToDB(AObject) then exit;
