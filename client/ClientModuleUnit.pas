@@ -12,12 +12,10 @@ type
   private
     FInstanceOwner: Boolean;
     FServerMethodsClient: TServerMethodsClient;
-    FTestMethodClient: TTestMethodClient;
     FCrudClient: TCrudClient;
     FDSReportClient: TDSReportClient;
     FDSProviderClient: TDSProviderClient;
     function GetServerMethodsClient: TServerMethodsClient;
-    function GetTestMethodClient: TTestMethodClient;
     function GetCrudClient: TCrudClient;
     function GetDSReportClient: TDSReportClient;
     function GetDSProviderClient: TDSProviderClient;
@@ -27,7 +25,6 @@ type
     destructor Destroy; override;
     property InstanceOwner: Boolean read FInstanceOwner write FInstanceOwner;
     property ServerMethodsClient: TServerMethodsClient read GetServerMethodsClient write FServerMethodsClient;
-    property TestMethodClient: TTestMethodClient read GetTestMethodClient write FTestMethodClient;
     property CrudClient: TCrudClient read GetCrudClient write FCrudClient;
     property DSReportClient: TDSReportClient read GetDSReportClient write FDSReportClient;
     property DSProviderClient: TDSProviderClient read GetDSProviderClient write
@@ -53,7 +50,7 @@ end;
 destructor TClientModule.Destroy;
 begin
   FServerMethodsClient.Free;
-  FTestMethodClient.Free;
+//  FTestMethodClient.Free;
   FCrudClient.Free;
   FDSReportClient.Free;
   inherited;
@@ -64,12 +61,6 @@ begin
   if FServerMethodsClient = nil then
     FServerMethodsClient:= TServerMethodsClient.Create(DSRestConnection, FInstanceOwner);
   Result := FServerMethodsClient;
-end;
-function TClientModule.GetTestMethodClient: TTestMethodClient;
-begin
-  if FTestMethodClient = nil then
-    FTestMethodClient:= TTestMethodClient.Create(DSRestConnection, FInstanceOwner);
-  Result := FTestMethodClient;
 end;
 function TClientModule.GetCrudClient: TCrudClient;
 begin

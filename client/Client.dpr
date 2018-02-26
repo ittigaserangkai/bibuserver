@@ -18,7 +18,10 @@ uses
   uSpell in '..\lib\uSpell.pas',
   uTSINIFile in '..\lib\uTSINIFile.pas',
   uConstanta in '..\server\unit\uConstanta.pas',
-  uDXUtils in '..\lib\uDXUtils.pas';
+  uDXUtils in '..\lib\uDXUtils.pas',
+  uMR in '..\model\uMR.pas',
+  uMRGroupReport in '..\model\uMRGroupReport.pas',
+  uUser in '..\model\uUser.pas';
 
 {$R *.res}
 

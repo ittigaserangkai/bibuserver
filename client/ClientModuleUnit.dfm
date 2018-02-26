@@ -5,6 +5,7 @@ object ClientModule: TClientModule
   object DSRestConnection: TDSRestConnection
     Host = 'localhost'
     Port = 8080
+    LoginPrompt = False
     PreserveSessionID = False
     Left = 48
     Top = 40

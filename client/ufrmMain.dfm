@@ -2,8 +2,8 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'BIBU (Business Intelligence Of Business Unit)'
-  ClientHeight = 445
-  ClientWidth = 819
+  ClientHeight = 444
+  ClientWidth = 929
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,21 +11,22 @@ object frmMain: TfrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object cxPCCPR: TcxPageControl
     Left = 0
     Top = 0
-    Width = 819
-    Height = 404
+    Width = 929
+    Height = 403
     Align = alClient
     TabOrder = 0
-    Properties.ActivePage = cxTSCPRSetting
+    Properties.ActivePage = cxTSGroupReportItem
     Properties.CustomButtons.Buttons = <>
-    ClientRectBottom = 400
+    ClientRectBottom = 399
     ClientRectLeft = 4
-    ClientRectRight = 815
+    ClientRectRight = 925
     ClientRectTop = 24
     object cxTSCPR: TcxTabSheet
       Caption = 'CPR'
@@ -37,15 +38,15 @@ object frmMain: TfrmMain
       object cxPCCPRSetting: TcxPageControl
         Left = 0
         Top = 0
-        Width = 811
-        Height = 376
+        Width = 921
+        Height = 375
         Align = alClient
         TabOrder = 0
-        Properties.ActivePage = cxTSCPRInput
+        Properties.ActivePage = cxTSCPRSettingOverview
         Properties.CustomButtons.Buttons = <>
-        ClientRectBottom = 372
+        ClientRectBottom = 371
         ClientRectLeft = 4
-        ClientRectRight = 807
+        ClientRectRight = 917
         ClientRectTop = 24
         object cxTSCPRSettingOverview: TcxTabSheet
           Caption = 'Overview'
@@ -53,8 +54,8 @@ object frmMain: TfrmMain
           object cxgrdCPRSettingOV: TcxGrid
             Left = 0
             Top = 0
-            Width = 803
-            Height = 348
+            Width = 913
+            Height = 347
             Align = alClient
             TabOrder = 0
             object cxGridDBTableCPRSettingOV: TcxGridDBTableView
@@ -76,7 +77,7 @@ object frmMain: TfrmMain
           object pnlHeaderCPRSetting: TPanel
             Left = 0
             Top = 0
-            Width = 803
+            Width = 913
             Height = 89
             Align = alTop
             TabOrder = 0
@@ -129,8 +130,8 @@ object frmMain: TfrmMain
           object cxgrdCPRSetting: TcxGrid
             Left = 0
             Top = 89
-            Width = 803
-            Height = 259
+            Width = 913
+            Height = 258
             Align = alClient
             TabOrder = 1
             RootLevelOptions.DetailTabsPosition = dtpTop
@@ -172,16 +173,194 @@ object frmMain: TfrmMain
         end
       end
     end
+    object cxTSGroupReport: TcxTabSheet
+      Caption = 'Group Report'
+      ImageIndex = 2
+      object cxPCGroupReport: TcxPageControl
+        Left = 0
+        Top = 0
+        Width = 921
+        Height = 375
+        Align = alClient
+        TabOrder = 0
+        Properties.ActivePage = cxTSGROverview
+        Properties.CustomButtons.Buttons = <>
+        ClientRectBottom = 371
+        ClientRectLeft = 4
+        ClientRectRight = 917
+        ClientRectTop = 24
+        object cxTSGROverview: TcxTabSheet
+          Caption = 'Overview'
+          ImageIndex = 0
+          object cxgrdMRGroup: TcxGrid
+            Left = 0
+            Top = 0
+            Width = 913
+            Height = 347
+            Align = alClient
+            TabOrder = 0
+            object cxGridDBTableMRGroup: TcxGridDBTableView
+              Navigator.Buttons.CustomButtons = <>
+              OnCellDblClick = cxGridDBTableMRGroupCellDblClick
+              OnEditing = cxGridDBTableMRGroupEditing
+              DataController.Summary.DefaultGroupSummaryItems = <>
+              DataController.Summary.FooterSummaryItems = <>
+              DataController.Summary.SummaryGroups = <>
+            end
+            object cxgrdlvlMRGroup: TcxGridLevel
+              GridView = cxGridDBTableMRGroup
+            end
+          end
+        end
+        object cxTSGRInput: TcxTabSheet
+          Caption = 'Input'
+          ImageIndex = 1
+          object lblKodeGR: TLabel
+            Left = 6
+            Top = 7
+            Width = 24
+            Height = 13
+            Caption = 'Kode'
+          end
+          object lblNamaGR: TLabel
+            Left = 3
+            Top = 34
+            Width = 27
+            Height = 13
+            Caption = 'Nama'
+          end
+          object edGRKode: TcxTextEdit
+            Tag = 1
+            Left = 49
+            Top = 3
+            TabOrder = 0
+            Text = 'edGRKode'
+            Width = 121
+          end
+          object edGRName: TcxTextEdit
+            Tag = 1
+            Left = 49
+            Top = 30
+            TabOrder = 1
+            Text = 'edGRName'
+            Width = 121
+          end
+        end
+      end
+    end
+    object cxTSGroupReportItem: TcxTabSheet
+      Caption = 'Group Report Item'
+      ImageIndex = 3
+      object cxPCGRI: TcxPageControl
+        Left = 0
+        Top = 0
+        Width = 921
+        Height = 375
+        Align = alClient
+        TabOrder = 0
+        Properties.ActivePage = cxTSGRIInput
+        Properties.CustomButtons.Buttons = <>
+        ClientRectBottom = 371
+        ClientRectLeft = 4
+        ClientRectRight = 917
+        ClientRectTop = 24
+        object cxTSGRIOverview: TcxTabSheet
+          Caption = 'Overview'
+          ImageIndex = 0
+          object cxgrdGRI: TcxGrid
+            Left = 0
+            Top = 0
+            Width = 913
+            Height = 347
+            Align = alClient
+            TabOrder = 0
+            object cxGridDBTableGRI: TcxGridDBTableView
+              Navigator.Buttons.CustomButtons = <>
+              OnCellDblClick = cxGridDBTableGRICellDblClick
+              OnEditing = cxGridDBTableMRGroupEditing
+              DataController.Summary.DefaultGroupSummaryItems = <>
+              DataController.Summary.FooterSummaryItems = <>
+              DataController.Summary.SummaryGroups = <>
+            end
+            object cxgrdlvlGRI: TcxGridLevel
+              GridView = cxGridDBTableGRI
+            end
+          end
+        end
+        object cxTSGRIInput: TcxTabSheet
+          Caption = 'Input'
+          ImageIndex = 1
+          object lblKodeGRI: TLabel
+            Left = 17
+            Top = 62
+            Width = 24
+            Height = 13
+            Caption = 'Kode'
+          end
+          object lblGRINama: TLabel
+            Left = 14
+            Top = 87
+            Width = 27
+            Height = 13
+            Caption = 'Nama'
+          end
+          object lblGRIUnit: TLabel
+            Left = 22
+            Top = 12
+            Width = 19
+            Height = 13
+            Caption = 'Unit'
+          end
+          object lblGRIGroup: TLabel
+            Left = 12
+            Top = 37
+            Width = 29
+            Height = 13
+            Caption = 'Group'
+          end
+          object cbbGRIUnit: TcxExtLookupComboBox
+            Tag = 99
+            Left = 65
+            Top = 8
+            TabOrder = 0
+            Width = 145
+          end
+          object cbbGRIGroup: TcxExtLookupComboBox
+            Tag = 99
+            Left = 65
+            Top = 33
+            TabOrder = 1
+            Width = 145
+          end
+          object edGRIKode: TcxTextEdit
+            Tag = 1
+            Left = 65
+            Top = 58
+            TabOrder = 2
+            Text = 'edGRIKode'
+            Width = 121
+          end
+          object edGRINama: TcxTextEdit
+            Tag = 1
+            Left = 65
+            Top = 83
+            TabOrder = 3
+            Text = 'edGRINama'
+            Width = 121
+          end
+        end
+      end
+    end
   end
   object pnlButton: TPanel
     Left = 0
-    Top = 404
-    Width = 819
+    Top = 403
+    Width = 929
     Height = 41
     Align = alBottom
     TabOrder = 1
     object bSimpan: TcxButton
-      Left = 743
+      Left = 853
       Top = 1
       Width = 75
       Height = 39
@@ -191,7 +370,7 @@ object frmMain: TfrmMain
       OnClick = bSimpanClick
     end
     object bClear: TcxButton
-      Left = 668
+      Left = 778
       Top = 1
       Width = 75
       Height = 39
@@ -211,7 +390,7 @@ object frmMain: TfrmMain
       OnClick = bRefreshClick
     end
     object bDelete: TcxButton
-      Left = 593
+      Left = 703
       Top = 1
       Width = 75
       Height = 39
