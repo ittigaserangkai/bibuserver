@@ -538,7 +538,7 @@ begin
   S := 'select * from TMRItemReport where GROUPREPORT = ' + QuotedStr(AMRGroupID)
      + ' and UNITUSAHA = '  + QuotedStr(AUnitID);
   lQ := TDBUtils.OpenQuery(S);
-  try
+  try                     //
     while not lQ.Eof do
     begin
       SetReportItem(lMR, lQ.FieldByName('ID').AsString);
