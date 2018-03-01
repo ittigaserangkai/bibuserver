@@ -480,7 +480,7 @@ begin
   lQ := TDBUtils.OpenQuery(S);
   try
     if not lQ.Eof then
-      Result := Self.Retrieve(TModMR, lQ.FieldByName('ID').AsInteger)
+      Result := Self.Retrieve(TModMR, lQ.FieldByName('ID').AsString) as TModMR
     else
       Result := TModMR.Create;
   finally
