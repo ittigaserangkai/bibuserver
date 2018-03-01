@@ -7,6 +7,14 @@ uses
   StrUtils, Datasnap.DBClient, uUser, System.JSON, uJSONUtils, uMR;
 
 type
+  TServerModAppHelper = class helper for TModApp
+  private
+  protected
+  public
+    procedure CopyFrom(aModApp : TModApp);
+    procedure Reload(LoadObjectList: Boolean = False);
+  end;
+
   {$METHODINFO ON}
   TBaseServerClass = class(TComponent)
   public
@@ -58,12 +66,12 @@ type
     function SaveToDB(AJSON: TJSONObject): TJSONObject;
   end;
 
-  TMRCRUD = class(TCrud)
+  TCRUDMR = class(TCrud)
   public
     function GetMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear: Integer):
         TModMR;
-    function PrepareMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear:
-        Integer): TModMR;
+    function PrepareMR(AMRGroupID, AUnitID: String; AMonth, AYear: Integer):
+        TJSONObject;
   end;
 
 
@@ -465,10 +473,9 @@ begin
   ctx.Free;
 end;
 
-function TMRCRUD.GetMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear:
+function TCRUDMR.GetMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear:
     Integer): TModMR;
 var
-  lMR: TModMR;
   lQ: TDataSet;
   S: string;
 begin
@@ -480,31 +487,31 @@ begin
   lQ := TDBUtils.OpenQuery(S);
   try
     if not lQ.Eof then
-      Result := Self.Retrieve(TModMR, lQ.FieldByName('ID').AsString) as TModMR
-    else
-      Result := TModMR.Create;
+      Result := Self.Retrieve(TModMR, lQ.FieldByName('ID').AsString) as TModMR;
   finally
     lQ.Free;
   end;
 end;
 
-function TMRCRUD.PrepareMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear:
-    Integer): TModMR;
+function TCRUDMR.PrepareMR(AMRGroupID, AUnitID: String; AMonth, AYear:
+    Integer): TJSONObject;
 var
+  lItem: TModMRItem;
   lLastYearMR: TModMR;
+  lLYItem: TModMRItem;
   lMR: TModMR;
   lQ: TDataSet;
   S: string;
 
-  procedure SetReportItem(aItem: TModMRItemReport);
+  procedure SetReportItem(aMR: TModMR; aItemID: string);
   var
     lFound: Boolean;
     lItem: TModMRItem;
   begin
     lFound := False;
-    for lItem in Result.MRItems do
+    for lItem in aMR.MRItems do
     begin
-      if lItem.MRItemReport.ID = aItem.ID then
+      if lItem.MRItemReport.ID = aItemID then
       begin
         lFound := True;
       end;
@@ -512,41 +519,151 @@ var
     if not lFound then
     begin
       lItem := TModMRItem.Create;
-      lItem.MRItemReport := TModMRItemReport.CreateID(aItem.ID);
+      lItem.MRItemReport := TModMRItemReport.CreateID(aItemID);
+      aMR.MRItems.Add(lItem);
     end;
   end;
-
-  procedure SetLastYearItem;
-  var
-    lItem: TModMRItemReport;
-    lLYItem: TModMRItemReport;
+begin
+  lMR := Self.GetMRByPeriod(AMRGroupID, AUnitID, AMonth, AYear);
+  if lMR = nil then
   begin
-//    for lItem in Result.MRItems do
-//    begin
-//      for lLYItem in lLastYearMR.MRItems do
-//      begin
-//        if lItem.ID = lLYItem. then
-//
-//
-//      end;
-//    end;
-
+    lMR := TModMR.Create;
+    lMR.Bulan := AMonth;
+    lMR.Tahun := AYear;
+    lMR.GroupReport := TModMRGroupReport.CreateID(AMRGroupID);
+    lMR.UnitUsaha   := TModUnit.CreateID(AUnitID);
   end;
 
-begin
-  Result := Self.GetMRByPeriod(AMRGroupID, AUnitID, AMonth, AYear);
   lLastYearMR  := Self.GetMRByPeriod(AMRGroupID, AUnitID, AMonth, AYear-1);
-
   S := 'select * from TMRItemReport where GROUPREPORT = ' + QuotedStr(AMRGroupID)
      + ' and UNITUSAHA = '  + QuotedStr(AUnitID);
   lQ := TDBUtils.OpenQuery(S);
   try
     while not lQ.Eof do
     begin
+      SetReportItem(lMR, lQ.FieldByName('ID').AsString);
       lQ.Next;
     end;
+
+    //set lastyear & reload mritemreport
+    for lItem in lMR.MRItems do
+    begin
+      if lLastYearMR <> nil then
+        for lLYItem in lLastYearMR.MRItems do
+        begin
+          if lItem.ID = lLYItem.ID then
+          begin
+            lItem.LastYear := lLYItem.Actual;
+          end;
+        end;
+      lItem.MRItemReport.Reload;
+    end;
+
+    Result := TJSONUtils.ModelToJSON(lMR, [], True);
   finally
     lQ.Free;
+  end;
+end;
+
+procedure TServerModAppHelper.CopyFrom(aModApp : TModApp);
+var
+  ctx: TRttiContext;
+  i: Integer;
+  lAppClass: TModAppClass;
+  lNewItem: TModApp;
+  lNewObjList: TObject;
+  lSrcItem: TModApp;
+  lSrcObjList: TObject;
+  meth: TRttiMethod;
+  RttiType: TRttiType;
+  Prop: TRttiProperty;
+  rtItem: TRttiType;
+  sGenericItemClassName: string;
+  value: TValue;
+
+  function SetPropertyFrom(AProp: TRttiProperty; ASource: TModApp): TModApp;
+  var
+    lSrcObj: TObject;
+  begin
+    Result := nil;
+    lSrcObj := Prop.GetValue(ASource).AsObject;
+    if not prop.PropertyType.AsInstance.MetaclassType.InheritsFrom(TModApp) then exit;;
+    meth    := prop.PropertyType.GetMethod('Create');
+    Result  := TModApp(meth.Invoke(prop.PropertyType.AsInstance.MetaclassType, []).AsObject);
+    if lSrcObj <> nil then
+      TModApp(Result).CopyFrom(TModApp(lSrcObj));
+  end;
+
+begin
+  RttiType := ctx.GetType(Self.ClassType);
+  Try
+    for Prop in RttiType.GetProperties do
+    begin
+      if not (Prop.IsReadable and Prop.IsWritable) then continue;
+//      if prop.Visibility <> mvPublished then continue;
+
+      If prop.PropertyType.TypeKind = tkClass then
+      begin
+        meth := prop.PropertyType.GetMethod('ToArray');
+        if Assigned(meth) then  //object list
+        begin
+          lSrcObjList := prop.GetValue(aModApp).AsObject;
+          lNewObjList := prop.GetValue(Self).AsObject;
+          if lSrcObjList = nil then continue;
+
+          value  := meth.Invoke(prop.GetValue(aModApp), []);
+          Assert(value.IsArray);
+          sGenericItemClassName := StringReplace(lSrcObjList.ClassName, 'TOBJECTLIST<','', [rfIgnoreCase]);
+          sGenericItemClassName := StringReplace(sGenericItemClassName, '>','', [rfIgnoreCase]);
+          rtItem := ctx.FindType(sGenericItemClassName);
+
+          meth := prop.PropertyType.GetMethod('Add');
+          if Assigned(meth) and Assigned(rtItem) then
+          begin
+            if not rtItem.AsInstance.MetaclassType.InheritsFrom(TModApp) then continue;
+            lAppClass := TModAppClass( rtItem.AsInstance.MetaclassType );
+            for i := 0 to value.GetArrayLength - 1 do
+            begin
+              lSrcItem := TModApp(value.GetArrayElement(i).AsObject);
+              lNewItem := lAppClass.Create;
+              lNewItem.CopyFrom(lSrcItem);
+              meth.Invoke(lNewObjList,[lNewItem]);
+            end;
+          end;
+          prop.SetValue(Self, lNewObjList);
+        end
+        else
+        begin
+          prop.SetValue(Self, SetPropertyFrom(prop, aModApp));
+        end;
+      end else
+        Prop.SetValue(Self, Prop.GetValue(aModApp));
+    end;
+  except
+    raise;
+  End;
+end;
+
+procedure TServerModAppHelper.Reload(LoadObjectList: Boolean = False);
+var
+  lCRUD: TCRUD;
+  lModApp: TModApp;
+begin
+  If Self.ID = '' then exit;
+  lCRUD := TCRUD.Create(nil);
+  try
+    if LoadObjectList then
+      lModApp := lCRUD.Retrieve(Self.ClassName, Self.ID)
+    else
+      lModApp := lCRUD.RetrieveSingle(Self.ClassName, Self.ID);
+
+    Try
+      Self.CopyFrom(lModApp);
+    Finally
+      lModApp.Free;
+    End;
+  finally
+    FreeAndNil(lCRUD);
   end;
 end;
 

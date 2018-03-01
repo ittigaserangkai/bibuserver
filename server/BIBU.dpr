@@ -22,9 +22,9 @@ uses
   uEmbedded in '..\model\uEmbedded.pas',
   uIndikator in '..\model\uIndikator.pas',
   uUser in '..\model\uUser.pas',
-  uMR in '..\model\uMR.pas',
   uMRGroupReport in '..\model\uMRGroupReport.pas',
-  uJSONUtils in 'unit\uJSONUtils.pas';
+  uJSONUtils in 'unit\uJSONUtils.pas',
+  uMR in '..\model\uMR.pas';
 
 {$R *.res}
 

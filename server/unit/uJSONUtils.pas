@@ -14,8 +14,8 @@ type
     class function JSONToModel(AJSON: TJSONObject; AModAppClass: TModAppClass):
         TModApp;
     class function ModelToJSON(AObject: TModApp): TJSONObject; overload;
-    class function ModelToJSON(AObject: TModApp; FilterProperties: Array Of
-        String): TJSONObject; overload;
+    class function ModelToJSON(AObject: TModApp; FilterProperties: Array Of String;
+        Deep: Boolean = False): TJSONObject; overload;
     class function GetProperty(AObject: TModApp; APropName: String; ShowException:
         Boolean = True): TRttiProperty;
     class function DataSetToJSON(ADataSet: TDataSet): TJSONArray; overload;
@@ -56,7 +56,7 @@ begin
       LPair := AJSON.Pairs[i];
       if UpperCase(LPair.JsonString.Value) = 'CLASSNAME' then continue;
 
-      prop := GetProperty(Result, LPair.JsonString.Value);
+      prop := GetProperty(Result, LPair.JsonString.Value, False);
       if not prop.IsWritable then continue;
 
       case prop.PropertyType.TypeKind of
@@ -129,7 +129,7 @@ begin
 end;
 
 class function TJSONUtils.ModelToJSON(AObject: TModApp; FilterProperties: Array
-    Of String): TJSONObject;
+    Of String; Deep: Boolean = False): TJSONObject;
 var
   ctx : TRttiContext;
   i: Integer;
@@ -159,46 +159,25 @@ var
         Result := True;
     end;
   end;
-
 begin
   AObject.ObjectState := 0;
   Result := TJSONObject.Create;
   rt := ctx.GetType(AObject.ClassType);
   for prop in rt.GetProperties do
   begin
+    if not (prop.Visibility in [mvPublished, mvPublic]) then continue;
     pairName := LowerCase(prop.Name);
     if not CheckFilter(pairName) then continue;
 
-    If prop.Visibility = mvPublished then
-    begin
-      case prop.PropertyType.TypeKind of
-        tkInteger, tkInt64, tkFloat :
-        begin
-          lVal := prop.GetValue(AObject).AsExtended;
-//          if CompareText('TDateTime', prop.PropertyType.Name)=0 then
-//          begin
-//            lDate := lVal;
-//            Result.AddPair(pairName, TJSONString.Create(DateToStr(lDate)));
-//          end else
-          Result.AddPair(pairName, TJSONNumber.Create(lVal));
-        end;
-        tkUString, tkString, tkWideString :
-          Result.AddPair(pairName, TJSONString.Create(prop.GetValue(AObject).AsString));
-        tkClass :
-        begin
-          lObj := prop.GetValue(AObject).AsObject;
-          if lObj = nil then
-            Result.AddPair(pairName, TJSONNull.Create)
-          else if lObj.InheritsFrom(TModApp) then
-            Result.AddPair(pairName, Self.ModelToJSON(TModApp(lObj), ['ID']));
-        end;
-      else
-        Result.AddPair(pairName,
-          TJSONString.Create(VarToStr(prop.GetValue(AObject).AsVariant)));
+    case prop.PropertyType.TypeKind of
+      tkInteger, tkInt64, tkFloat :
+      begin
+        lVal := prop.GetValue(AObject).AsExtended;
+        Result.AddPair(pairName, TJSONNumber.Create(lVal));
       end;
-    end else
-    begin
-      if prop.PropertyType.TypeKind = tkClass then
+      tkUString, tkString, tkWideString :
+        Result.AddPair(pairName, TJSONString.Create(prop.GetValue(AObject).AsString));
+      tkClass :
       begin
         meth := prop.PropertyType.GetMethod('ToArray');
         if Assigned(meth) then
@@ -220,14 +199,28 @@ begin
               lObj := value.GetArrayElement(i).AsObject;
               If not lObj.ClassType.InheritsFrom(TModApp) then continue;  //bila ada generic selain class ini
               lModItem := TModApp(lObj);
-              lJSONItem := Self.ModelToJSON(lModItem);
+              lJSONItem := Self.ModelToJSON(lModItem, [], Deep);
               lJSOArr.AddElement(lJSONItem);
             end;
 
           end;
+        end else
+        begin
+          lObj := prop.GetValue(AObject).AsObject;
+          if lObj = nil then
+            Result.AddPair(pairName, TJSONNull.Create)
+          else if lObj.InheritsFrom(TModApp) then
+          begin
+            if Deep then
+              Result.AddPair(pairName, Self.ModelToJSON(TModApp(lObj)))
+            else
+              Result.AddPair(pairName, Self.ModelToJSON(TModApp(lObj), ['ID']))
+          end;
         end;
       end;
-
+    else
+      Result.AddPair(pairName,
+        TJSONString.Create(VarToStr(prop.GetValue(AObject).AsVariant)));
     end;
   end;
 end;

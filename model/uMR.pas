@@ -37,6 +37,9 @@ type
     FMRItemReport: TModMRItemReport;
     FMR: TModMR;
     FTarget: Double;
+    FLastYear: Double;
+  public
+    property LastYear: Double read FLastYear write FLastYear;
   published
     property Actual: Double read FActual write FActual;
     property MRItemReport: TModMRItemReport read FMRItemReport write FMRItemReport;
