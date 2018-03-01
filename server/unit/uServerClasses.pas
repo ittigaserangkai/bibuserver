@@ -472,7 +472,7 @@ var
   lQ: TDataSet;
   S: string;
 begin
-  S := 'SELECT * FROM MR A '
+  S := 'SELECT * FROM MR A  '
       +' WHERE BULAN = ' + IntToStr(AMonth)
       +' AND A.TAHUN = ' + IntToStr(AYear)
       +' AND GROUPREPORT = ' + QuotedStr(AMRGroupID)
