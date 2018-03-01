@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
-  StrUtils, Datasnap.DBClient, uUser, System.JSON, uJSONUtils;
+  StrUtils, Datasnap.DBClient, uUser, System.JSON, uJSONUtils, uMR;
 
 type
   {$METHODINFO ON}
@@ -22,11 +22,11 @@ type
   private
     function Retrieve(ModAppClass: TModAppClass; AID: String; LoadObjectList:
         Boolean = True): TModApp; overload;
-    function StringToClass(ModClassName: string): TModAppClass;
     function ValidateCode(AOBject: TModApp): Boolean;
   protected
     function BeforeSaveToDB(AObject: TModApp): Boolean; virtual;
     function AfterSaveToDB(AObject: TModApp): Boolean; virtual;
+    function StringToClass(ModClassName: string): TModAppClass;
   public
     function SaveToDB(AObject: TModApp): Boolean;
     function DeleteFromDB(AObject: TModApp): Boolean;
@@ -38,8 +38,10 @@ type
     function GenerateNo(aClassName: string): String; overload;
     function RetrieveSingle(ModClassName, AID: string): TModApp; overload;
     function RetrieveByCode(ModClassName, aCode: string): TModApp; overload;
+    function RetrieveJSON(AClassName, AID: String): TJSONObject;
     function SaveToDBLog(AObject: TModApp): Boolean;
     function SaveToDBID(AObject: TModApp): String;
+    function SaveToDBJSON(AJSON: TJSONObject): TJSONObject;
     function TestGenerateSQL(AObject: TModApp): TStrings;
   end;
 
@@ -56,6 +58,14 @@ type
     function SaveToDB(AJSON: TJSONObject): TJSONObject;
   end;
 
+  TMRCRUD = class(TCrud)
+  public
+    function GetMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear: Integer):
+        TModMR;
+    function PrepareMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear:
+        Integer): TModMR;
+  end;
+
 
 
 {$METHODINFO OFF}
@@ -66,7 +76,8 @@ const
 implementation
 
 uses
-  System.Generics.Collections, Datasnap.DSSession, Data.DBXPlatform, uUnit;
+  System.Generics.Collections, Datasnap.DSSession, Data.DBXPlatform, uUnit,
+  uMRGroupReport;
 
 function TUser.GetLoginUser(aUserName, aPassword: String): TModUser;
 var
@@ -109,7 +120,6 @@ end;
 
 function TCrud.SaveToDB(AObject: TModApp): Boolean;
 var
-  lModUser: TModUser;
   lSS: TStrings;
 begin
   Result := False;
@@ -252,6 +262,18 @@ begin
   AfterExecuteMethod;
 end;
 
+function TCrud.RetrieveJSON(AClassName, AID: String): TJSONObject;
+var
+  lModApp: TModApp;
+begin
+  lModApp := Self.Retrieve(AClassName, AID);
+  try
+    Result := TJSONUtils.ModelToJSON(lModApp);
+  finally
+    lModApp.Free;
+  end;
+end;
+
 function TCrud.SaveToDBLog(AObject: TModApp): Boolean;
 var
   lSS: TStrings;
@@ -300,6 +322,28 @@ begin
     lSS.Free;
     AfterExecuteMethod;
   End;
+end;
+
+function TCrud.SaveToDBJSON(AJSON: TJSONObject): TJSONObject;
+var
+  AClassName: string;
+  lClass: TModAppClass;
+  LJSVal: TJSONValue;
+  lModApp: TModApp;
+begin
+//  LJSVal  := AJSON.GetValue('ClassName');
+  lJSVal := TJSONUtils.GetValue(AJSON, 'ClassName');
+  if LJSVal = nil then
+    Raise Exception.Create('ClassName can''t be found in JSON Body');
+  AClassName := LJSVal.Value;
+  lClass  := StringToClass(AClassName);
+  lModApp := TJSONUtils.JSONToModel(AJSON, lClass);
+  Self.SaveToDB(lModApp);
+  try
+    Result := TJSONUtils.ModelToJSON(lModApp);
+  finally
+    lModApp.Free;
+  end;
 end;
 
 function TCrud.StringToClass(ModClassName: string): TModAppClass;
@@ -419,6 +463,91 @@ begin
     end;
   end;
   ctx.Free;
+end;
+
+function TMRCRUD.GetMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear:
+    Integer): TModMR;
+var
+  lMR: TModMR;
+  lQ: TDataSet;
+  S: string;
+begin
+  S := 'SELECT * FROM MR A '
+      +' WHERE BULAN = ' + IntToStr(AMonth)
+      +' AND A.TAHUN = ' + IntToStr(AYear)
+      +' AND GROUPREPORT = ' + QuotedStr(AMRGroupID)
+      +' AND UNITUSAHA = ' + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    if not lQ.Eof then
+      Result := Self.Retrieve(TModMR, lQ.FieldByName('ID').AsInteger)
+    else
+      Result := TModMR.Create;
+  finally
+    lQ.Free;
+  end;
+end;
+
+function TMRCRUD.PrepareMRByPeriod(AMRGroupID, AUnitID: String; AMonth, AYear:
+    Integer): TModMR;
+var
+  lLastYearMR: TModMR;
+  lMR: TModMR;
+  lQ: TDataSet;
+  S: string;
+
+  procedure SetReportItem(aItem: TModMRItemReport);
+  var
+    lFound: Boolean;
+    lItem: TModMRItem;
+  begin
+    lFound := False;
+    for lItem in Result.MRItems do
+    begin
+      if lItem.MRItemReport.ID = aItem.ID then
+      begin
+        lFound := True;
+      end;
+    end;
+    if not lFound then
+    begin
+      lItem := TModMRItem.Create;
+      lItem.MRItemReport := TModMRItemReport.CreateID(aItem.ID);
+    end;
+  end;
+
+  procedure SetLastYearItem;
+  var
+    lItem: TModMRItemReport;
+    lLYItem: TModMRItemReport;
+  begin
+//    for lItem in Result.MRItems do
+//    begin
+//      for lLYItem in lLastYearMR.MRItems do
+//      begin
+//        if lItem.ID = lLYItem. then
+//
+//
+//      end;
+//    end;
+
+  end;
+
+begin
+  Result := Self.GetMRByPeriod(AMRGroupID, AUnitID, AMonth, AYear);
+  lLastYearMR  := Self.GetMRByPeriod(AMRGroupID, AUnitID, AMonth, AYear-1);
+
+  S := 'select * from TMRItemReport where GROUPREPORT = ' + QuotedStr(AMRGroupID)
+     + ' and UNITUSAHA = '  + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    while not lQ.Eof do
+    begin
+      lQ.Next;
+    end;
+  finally
+    lQ.Free;
+  end;
 end;
 
 

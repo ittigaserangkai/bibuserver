@@ -269,7 +269,7 @@ begin
   begin
     lJSRow := TJSONObject.Create;
     for i := 0 to ADataSet.FieldCount-1 do
-      lJSROw.AddPair(ADataSet.Fields[i].FieldName, ADataSet.Fields[i].Value);
+      lJSROw.AddPair(LowerCase(ADataSet.Fields[i].FieldName), ADataSet.Fields[i].Value);
     Result.AddElement(lJSROw);
     ADataSet.Next;
   end;

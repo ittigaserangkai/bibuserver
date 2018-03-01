@@ -82,7 +82,6 @@ type
     property Actual_LY: Double read FActual_LY write FActual_LY;
     [AttributeOfHeader]
     property CPR: TModCPR read FCPR write FCPR;
-
     [AttributeOfForeign]
     property Indikator: TModIndikator read FIndikator write FIndikator;
     property Justifikasi: string read FJustifikasi write FJustifikasi;

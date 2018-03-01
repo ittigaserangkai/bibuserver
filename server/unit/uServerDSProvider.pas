@@ -5,7 +5,7 @@ uses
   System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
   StrUtils, System.Generics.Collections, Data.FireDACJSONReflect,
   FireDAC.Stan.Storage, FireDAC.Stan.StorageBin, uServerClasses,
-  FireDAC.Comp.Client, uUser;
+  FireDAC.Comp.Client, uUser, uJSONUtils, System.JSON;
 
 type
   {$METHODINFO ON}
@@ -29,10 +29,10 @@ type
     function MRGroup_GetDSLookUp: TDataSet;
     function MRGroupItem_GetDSLookUp: TDataSet;
     function MRGroupItem_GetDSOverview: TDataSet;
+    function MRGroupItem_GetList(AUnitID, AMRGroupID: String): TJSONArray;
+    function MRGroup_GetList: TJSONArray;
+    function Unit_GetList: TJSONArray;
     function User_GetDS: TDataSet;
-
-
-
   end;
 
   TDSReport = class(TComponent)
@@ -201,7 +201,6 @@ var
   S: string;
 begin
   S := 'SELECT * FROM TIndikator';
-
   Result := TDBUtils.OpenQuery(S);
 end;
 
@@ -210,7 +209,6 @@ var
   S: string;
 begin
   S := 'SELECT * FROM TUnit';
-
   Result := TDBUtils.OpenQuery(S);
 end;
 
@@ -314,6 +312,35 @@ begin
   S := 'SELECT * FROM VIEW_GROUPREPORTITEM order by kode';
 
   Result := TDBUtils.OpenQuery(S);
+end;
+
+function TDSProvider.MRGroupItem_GetList(AUnitID, AMRGroupID: String):
+    TJSONArray;
+var
+  lDS: TDataSet;
+  S: string;
+begin
+  S := 'select * from TMRItemReport where GROUPREPORT = ' + QuotedStr(AMRGroupID)
+     + ' and UNITUSAHA = '  + QuotedStr(AUnitID);
+
+  lDS := TDBUtils.OpenQuery(S);
+  Result := TJSONUtils.DataSetToJSON(lDS);
+end;
+
+function TDSProvider.MRGroup_GetList: TJSONArray;
+var
+  lDS: TDataSet;
+begin
+  lDS := Self.MRGroup_GetDSOverview;
+  Result := TJSONUtils.DataSetToJSON(lDS);
+end;
+
+function TDSProvider.Unit_GetList: TJSONArray;
+var
+  lDS: TDataSet;
+begin
+  lDS := Self.Unit_GetDS;
+  Result := TJSONUtils.DataSetToJSON(lDS);
 end;
 
 function TDSProvider.User_GetDS: TDataSet;

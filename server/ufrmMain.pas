@@ -157,7 +157,7 @@ begin
       end;
 
       if SaveToDB(lCPRSetting) then
-        ShowMessage('Berhasi');
+        ShowMessage('Berhasil');
     finally
       lCPRSetting.Free;
       Free;
