@@ -30,6 +30,7 @@ type
     function MRGroupItem_GetDSLookUp: TDataSet;
     function MRGroupItem_GetDSOverview: TDataSet;
     function MRGroupItem_GetList(AUnitID, AMRGroupID: String): TJSONArray;
+    function PNLSettingtem_GetList(AUnitID: String): TJSONArray;
     function MRGroup_GetList: TJSONArray;
     function Unit_GetList: TJSONArray;
     function User_GetDS: TDataSet;
@@ -322,6 +323,17 @@ var
 begin
   S := 'select * from TMRItemReport where GROUPREPORT = ' + QuotedStr(AMRGroupID)
      + ' and UNITUSAHA = '  + QuotedStr(AUnitID);
+
+  lDS := TDBUtils.OpenQuery(S);
+  Result := TJSONUtils.DataSetToJSON(lDS);
+end;
+
+function TDSProvider.PNLSettingtem_GetList(AUnitID: String): TJSONArray;
+var
+  lDS: TDataSet;
+  S: string;
+begin
+  S := 'select * from PNLSetting where UNITUSAHA = '  + QuotedStr(AUnitID);
 
   lDS := TDBUtils.OpenQuery(S);
   Result := TJSONUtils.DataSetToJSON(lDS);

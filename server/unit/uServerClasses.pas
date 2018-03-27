@@ -4,7 +4,7 @@ interface
 
 uses
   System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
-  StrUtils, Datasnap.DBClient, uUser, System.JSON, uJSONUtils, uMR;
+  StrUtils, Datasnap.DBClient, uUser, System.JSON, uJSONUtils, uMR, uPNL;
 
 type
   TServerModAppHelper = class helper for TModApp
@@ -74,6 +74,21 @@ type
         TJSONObject;
   end;
 
+type
+  TCRUDPNLReport = class(TCrud)
+  private
+    function GetPNLReport(AUnitID: String; AMonth, AYear: Integer): TModPNLReport;
+    function GetPNLSetting(AUnitID: String): TModPNLSetting;
+  public
+    function GetPNLPeriod(AUnitID: String; AMonth, AYear: Integer): TJSONObject;
+  end;
+
+type
+  TCRUDPNLSetting = class(TCrud)
+  public
+    function GetPNLSetting(AUnitID: String): TJSONObject;
+  end;
+
 
 
 {$METHODINFO OFF}
@@ -96,9 +111,9 @@ var
 begin
   Result := nil;
 
-  S := 'SELECT * from TUSER'
-      +' WHERE USERNAME =' + QuotedStr(aUserName)
-      +' AND PASSWORD =' + QuotedStr(aPassword);
+  S := 'SELECT * from TUSER '
+      +' WHERE USERNAME = ' + QuotedStr(aUserName)
+      +' AND PASSWORD = ' + QuotedStr(aPassword);
 
   lDataset := TDBUtils.OpenQuery(S);
   lCrud := TCrud.Create(Self);
@@ -479,6 +494,7 @@ var
   lQ: TDataSet;
   S: string;
 begin
+  Result := nil;
   S := 'SELECT * FROM MR A  '
       +' WHERE BULAN = ' + IntToStr(AMonth)
       +' AND A.TAHUN = ' + IntToStr(AYear)
@@ -551,7 +567,7 @@ begin
       if lLastYearMR <> nil then
         for lLYItem in lLastYearMR.MRItems do
         begin
-          if lItem.ID = lLYItem.ID then
+          if lItem.MRItemReport.ID = lLYItem.MRItemReport.ID then
           begin
             lItem.LastYear := lLYItem.Actual;
           end;
@@ -664,6 +680,142 @@ begin
     End;
   finally
     FreeAndNil(lCRUD);
+  end;
+end;
+
+function TCRUDPNLReport.GetPNLPeriod(AUnitID: String; AMonth, AYear: Integer):
+    TJSONObject;
+var
+  LastYearPNL: TModPNLReport;
+  lItem: TModPNLReportItem;
+  lPNLItem: TModPNLReportItem;
+  lPNLReport: TModPNLReport;
+  lPNLSetting: TModPNLSetting;
+  lSettingItem: TModPNLSettingItem;
+  LYItem: TModPNLReportItem;
+begin
+  lPNLReport  := GetPNLReport(AUnitID, AMonth, AYear);
+  Result      := nil;
+  if lPNLReport = nil then
+  begin
+    lPNLReport := TModPNLReport.Create;
+    lPNLReport.Bulan := AMonth;
+    lPNLReport.Tahun := AYear;
+    lPNLReport.UnitUsaha := TModUnit.CreateID(AUnitID);
+  end;
+
+  lPNLSetting := GetPNLSetting(AUnitID);
+
+  if lPNLSetting = nil then exit;
+
+
+  //reload items
+  Try
+    for lSettingItem in lPNLSetting.Items do
+    begin
+      lItem := nil;
+      for lPNLItem in lPNLReport.Items do
+      begin
+        if lPNLItem.PNLSettingItem.ID = lSettingItem.ID then
+        begin
+          lItem := lPNLItem;
+          break;
+        end;
+      end;
+      if lItem = nil then
+      begin
+        lItem := TModPNLReportItem.Create();
+        lItem.PNLSettingItem := TModPNLSettingItem.CreateID(lSettingItem.ID);
+        lPNLReport.Items.Add(lItem);
+      end;
+      lItem.PNLSettingItem.Reload();
+    end;
+  Finally
+    lPNLSetting.Free;
+  End;
+
+  //lastyear
+  LastYearPNL := Self.GetPNLReport(AUnitID, AMonth, AYear-1);
+  if LastYearPNL <> nil then
+  begin
+    Try
+      for LYItem in LastYearPNL.Items do
+      begin
+        for lPNLItem in lPNLReport.Items do
+        begin
+          if lPNLItem.PNLSettingItem.ID = LYItem.PNLSettingItem.ID then
+          begin
+            lPNLItem.LastYear := LYItem.Actual;
+            lPNLItem.LastYearPercent := LYItem.ActualPercent;
+          end;
+        end;
+      end;
+    finally
+      LastYearPNL.free;
+    end;
+  end;
+
+  Result := TJSONUtils.ModelToJSON(lPNLReport, [], True);
+
+end;
+
+function TCRUDPNLReport.GetPNLReport(AUnitID: String; AMonth, AYear: Integer):
+    TModPNLReport;
+var
+  lQ: TDataSet;
+  S: string;
+begin
+  Result := nil;
+  S := 'SELECT * FROM TPNLREPORT '
+      +' WHERE BULAN = ' + IntToStr(AMonth)
+      +' AND TAHUN = ' + IntToStr(AYear)
+      +' AND UNITUSAHA = ' + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    if not lQ.Eof then
+    begin
+      Result := Self.Retrieve(TModPNLReport, lQ.FieldByName('ID').AsString) as TModPNLReport;
+    end;
+  finally
+    lQ.Free;
+  end;
+end;
+
+function TCRUDPNLReport.GetPNLSetting(AUnitID: String): TModPNLSetting;
+var
+  lQ: TDataSet;
+  S: string;
+begin
+  Result := nil;
+  S := 'SELECT * FROM TPNLSetting '
+      +' WHERE UNITUSAHA = ' + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    if not lQ.Eof then
+      Result := Self.Retrieve(TModPNLSetting, lQ.FieldByName('ID').AsString) as TModPNLSetting;
+  finally
+    lQ.Free;
+  end;
+end;
+
+function TCRUDPNLSetting.GetPNLSetting(AUnitID: String): TJSONObject;
+var
+  lPNLSetting: TModPNLSetting;
+  lQ: TDataSet;
+  S: string;
+begin
+  Result := nil;
+  S := 'SELECT * FROM TPNLSetting '
+      +' WHERE UNITUSAHA = ' + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    if not lQ.Eof then
+    begin
+      lPNLSetting := Self.Retrieve(TModPNLSetting, lQ.FieldByName('ID').AsString) as TModPNLSetting;
+      Result := TJSONUtils.ModelToJSON(lPNLSetting, [], True);
+    end;
+  finally
+    lQ.Free;
   end;
 end;
 

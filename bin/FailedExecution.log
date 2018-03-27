@@ -1,1 +1,5 @@
-Insert Into TMRItemReport(GroupReport,Kode,Nama,UnitUsaha,ID) values('{C25A4DB7-E6F5-44F1-9E44-28263206ED6D}','0001','Bahis','{C25A4DB7-E6F5-44F1-9E44-28263206ED6D}','{3ABE9117-2E30-49A2-973D-AB798029BBDC}');
+Update TPNLSetting set UnitUsaha = '{C25A4DB7-E6F5-44F1-9E44-28263206ED6D}',IsActive = 1,Nama = 'PT K33 DISTRIBUSI' where ID = '{7CC87ECA-9836-4558-9DA8-805847261F06}';
+Delete From TPNLSettingItem where PNLSetting='{7CC87ECA-9836-4558-9DA8-805847261F06}';
+Insert Into TPNLSettingItem(Indent,Kode,Nama,Formula,Level,PNLSetting,Style,Urutan,ID) values(0,'1','test 1','',0,'{7CC87ECA-9836-4558-9DA8-805847261F06}','',0,'{ABE38798-3CF5-4BE7-A7C9-8C0A04494BB0}');
+Insert Into TPNLSettingItem(Indent,Kode,Nama,Formula,Level,PNLSetting,Style,Urutan,ID) values(0,'2','test 2','',0,'{7CC87ECA-9836-4558-9DA8-805847261F06}','font-style:bold; color:red',0,'{05640AA5-8180-42F6-90D7-1BED0279E876}');
+Insert Into TPNLSettingItem(Indent,Kode,Nama,Formula,Level,PNLSetting,Style,Urutan,ID) values(0,'c','cc','',0,'{7CC87ECA-9836-4558-9DA8-805847261F06}','',0,'{CC3F12EA-EDC3-410D-8D78-91022F779E0E}');

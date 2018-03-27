@@ -74,6 +74,8 @@ begin
   TCustServerClass.Create(Self, DSServer, TDSProvider, DSServerClass.LifeCycle);
   TCustServerClass.Create(Self, DSServer, TDSReport, DSServerClass.LifeCycle);
   TCustServerClass.Create(Self, DSServer, TCRUDMR, DSServerClass.LifeCycle);
+  TCustServerClass.Create(Self, DSServer, TCRUDPNLReport, DSServerClass.LifeCycle);
+  TCustServerClass.Create(Self, DSServer, TCRUDPNLSetting, DSServerClass.LifeCycle);
 
 
 

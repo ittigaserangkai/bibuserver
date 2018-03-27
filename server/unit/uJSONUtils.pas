@@ -35,6 +35,7 @@ var
   lAppClass: TModAppClass;
   lAppObject: TModApp;
   lAppObjectItem: TModApp;
+//  lDebug: string;
   lExtVal: Extended;
   lIntVal: Integer;
   LJSONArr: TJSONArray;
@@ -57,6 +58,8 @@ begin
       if UpperCase(LPair.JsonString.Value) = 'CLASSNAME' then continue;
 
       prop := GetProperty(Result, LPair.JsonString.Value, False);
+
+      if prop = nil then continue;
       if not prop.IsWritable then continue;
 
       case prop.PropertyType.TypeKind of
@@ -98,6 +101,7 @@ begin
             end;
           end else
           begin
+            if LPair.JSONValue.Null then continue;
             if not prop.PropertyType.AsInstance.MetaclassType.InheritsFrom(TModApp) then continue;
             lAppClass   := TModAppClass( prop.PropertyType.AsInstance.MetaclassType );
             lJSONObj := TJSONObject.ParseJSONValue(LPair.JSONValue.ToString) as TJSONObject;
@@ -107,6 +111,10 @@ begin
             FreeAndNil(LJSONObj);
           end;
         end;
+        tkEnumeration :
+        begin
+
+        end
       else
         prop.SetValue(Result, LPair.JsonValue.Value);
       end;
