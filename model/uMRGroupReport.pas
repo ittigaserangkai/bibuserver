@@ -20,7 +20,6 @@ type
   published
     [AttributeOfForeign]
     property GroupReport: TModMRGroupReport read FGroupReport write FGroupReport;
-    [AttributeOfCode]
     property Kode: string read FKode write FKode;
     property Nama: string read FNama write FNama;
     [AttributeOfForeign]
