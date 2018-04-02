@@ -12,29 +12,29 @@ type
 
   TModPNLSettingItem = class(TModApp)
   private
-    FIndent: Integer;
-    FStyle: string;
-    FKode: string;
-    FNama: string;
     FFormula: string;
-    FPercentOf: string;
+    FIndent: Integer;
+    FKode: string;
     FLevel: Integer;
+    FNama: string;
+    FPercentOf: string;
     FPNLSetting: TModPNLSetting;
     FRowStyle: string;
+    FStyle: string;
     FUrutan: Integer;
   public
     class function GetTableName: String; override;
   published
+    property Formula: string read FFormula write FFormula;
     property Indent: Integer read FIndent write FIndent;
     property Kode: string read FKode write FKode;
-    property Nama: string read FNama write FNama;
-    property Formula: string read FFormula write FFormula;
-    property PercentOf: string read FPercentOf write FPercentOf;
     property Level: Integer read FLevel write FLevel;
+    property Nama: string read FNama write FNama;
+    property PercentOf: string read FPercentOf write FPercentOf;
     [AttributeOfHeader]
     property PNLSetting: TModPNLSetting read FPNLSetting write FPNLSetting;
-    property Style: string read FStyle write FStyle;
     property RowStyle: string read FRowStyle write FRowStyle;
+    property Style: string read FStyle write FStyle;
     property Urutan: Integer read FUrutan write FUrutan;
   end;
 
@@ -46,8 +46,8 @@ type
     FBudgetPercent: Double;
     FLastYear: Double;
     FLastYearPercent: Double;
-    FPNLSettingItem: TModPNLSettingItem;
     FPNLReport: TModPNLReport;
+    FPNLSettingItem: TModPNLSettingItem;
   public
     class function GetTableName: String; override;
     property LastYear: Double read FLastYear write FLastYear;
@@ -57,17 +57,20 @@ type
     property ActualPercent: Double read FActualPercent write FActualPercent;
     property Budget: Double read FBudget write FBudget;
     property BudgetPercent: Double read FBudgetPercent write FBudgetPercent;
-    property PNLSettingItem: TModPNLSettingItem read FPNLSettingItem write
-        FPNLSettingItem;
     [AttributeOfHeader]
     property PNLReport: TModPNLReport read FPNLReport write FPNLReport;
+    property PNLSettingItem: TModPNLSettingItem read FPNLSettingItem write
+        FPNLSettingItem;
   end;
 
   TModPNLReport = class(TModApp)
   private
+    FActionPlan: string;
     FBulan: Integer;
-    FKeterangan: string;
+    FGeneralCommentary: string;
+    FIssue: string;
     FItems: TObjectList<TModPNLReportItem>;
+    FKeterangan: string;
     FTahun: Integer;
     FTglInput: TDatetime;
     FUnitUsaha: TModUnit;
@@ -76,7 +79,11 @@ type
     class function GetTableName: String; override;
     property Items: TObjectList<TModPNLReportItem> read GetItems write FItems;
   published
+    property ActionPlan: string read FActionPlan write FActionPlan;
     property Bulan: Integer read FBulan write FBulan;
+    property GeneralCommentary: string read FGeneralCommentary write
+        FGeneralCommentary;
+    property Issue: string read FIssue write FIssue;
     property Keterangan: string read FKeterangan write FKeterangan;
     property Tahun: Integer read FTahun write FTahun;
     property TglInput: TDatetime read FTglInput write FTglInput;
@@ -85,18 +92,18 @@ type
 
   TModPNLSetting = class(TModApp)
   private
-    FUnitUsaha: TModUnit;
     FIsActive: Integer;
     FItems: TObjectList<TModPNLSettingItem>;
     FNama: string;
+    FUnitUsaha: TModUnit;
     function GetItems: TObjectList<TModPNLSettingItem>;
   public
     class function GetTableName: String; override;
     property Items: TObjectList<TModPNLSettingItem> read GetItems write FItems;
   published
-    property UnitUsaha: TModUnit read FUnitUsaha write FUnitUsaha;
     property IsActive: Integer read FIsActive write FIsActive;
     property Nama: string read FNama write FNama;
+    property UnitUsaha: TModUnit read FUnitUsaha write FUnitUsaha;
   end;
 
 implementation
@@ -144,12 +151,10 @@ begin
   Result := 'TPNLSettingItem';
 end;
 
-
 initialization
   TModPNLReport.RegisterRTTI;
   TModPNLReportItem.RegisterRTTI;
   TModPNLSetting.RegisterRTTI;
   TModPNLSettingItem.RegisterRTTI;
-
 
 end.

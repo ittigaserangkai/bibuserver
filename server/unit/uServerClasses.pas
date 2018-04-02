@@ -550,9 +550,11 @@ begin
     lMR.UnitUsaha   := TModUnit.CreateID(AUnitID);
   end;
 
-  lLastYearMR  := Self.GetMRByPeriod(AMRGroupID, AUnitID, AMonth, AYear-1);
-  S := 'select * from TMRItemReport where GROUPREPORT = ' + QuotedStr(AMRGroupID)
-     + ' and UNITUSAHA = '  + QuotedStr(AUnitID);
+  lLastYearMR := Self.GetMRByPeriod(AMRGroupID, AUnitID, AMonth, AYear-1);
+  S := 'select * from TMRItemReport '
+      + ' where GROUPREPORT = ' + QuotedStr(AMRGroupID)
+      + ' and UNITUSAHA = '  + QuotedStr(AUnitID)
+      + ' order by NAMA ';
   lQ := TDBUtils.OpenQuery(S);
   try
     while not lQ.Eof do
@@ -565,13 +567,13 @@ begin
     for lItem in lMR.MRItems do
     begin
       if lLastYearMR <> nil then
-        for lLYItem in lLastYearMR.MRItems do
+      for lLYItem in lLastYearMR.MRItems do
+      begin
+        if lItem.MRItemReport.ID = lLYItem.MRItemReport.ID then
         begin
-          if lItem.MRItemReport.ID = lLYItem.MRItemReport.ID then
-          begin
-            lItem.LastYear := lLYItem.Actual;
-          end;
+          lItem.LastYear := lLYItem.Actual;
         end;
+      end;
       lItem.MRItemReport.Reload;
     end;
 
