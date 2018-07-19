@@ -63,14 +63,10 @@ type
   private
     FServer: TIdHTTPWebBrokerBridge;
     procedure StartServer;
-    { Private declarations }
-  public
-    { Public declarations }
   end;
 
 var
   frmMain: TfrmMain;
-//  test : TDataSEt;
 
 implementation
 {$R *.dfm}
@@ -163,10 +159,6 @@ begin
       Free;
     end;
   end;
-
-
-
-
 end;
 
 procedure TfrmMain.ButtonStopClick(Sender: TObject);
@@ -196,9 +188,7 @@ begin
       edRestPort.Text  := '8080';
   end;
 
-
   StartServer;
-
 end;
 
 procedure TfrmMain.grpDBClick(Sender: TObject);

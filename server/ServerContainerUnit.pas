@@ -76,7 +76,8 @@ begin
   TCustServerClass.Create(Self, DSServer, TCRUDMR, DSServerClass.LifeCycle);
   TCustServerClass.Create(Self, DSServer, TCRUDPNLReport, DSServerClass.LifeCycle);
   TCustServerClass.Create(Self, DSServer, TCRUDPNLSetting, DSServerClass.LifeCycle);
-
+  TCustServerClass.Create(Self, DSServer, TCRUDEconomicSetting, DSServerClass.LifeCycle);
+  TCustServerClass.Create(Self, DSServer, TCRUDEconomicReport, DSServerClass.LifeCycle);
 
 
   //custom class here :

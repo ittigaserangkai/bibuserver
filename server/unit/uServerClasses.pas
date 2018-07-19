@@ -3,13 +3,11 @@ unit uServerClasses;
 interface
 
 uses
-  System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils,
-  StrUtils, Datasnap.DBClient, uUser, System.JSON, uJSONUtils, uMR, uPNL;
+  System.Classes, uModApp, uDBUtils, Rtti, Data.DB, SysUtils, StrUtils, uUser,
+  System.JSON, uJSONUtils, uMR, uPNL, uEconomic;
 
 type
   TServerModAppHelper = class helper for TModApp
-  private
-  protected
   public
     procedure CopyFrom(aModApp : TModApp);
     procedure Reload(LoadObjectList: Boolean = False);
@@ -32,24 +30,24 @@ type
         Boolean = True): TModApp; overload;
     function ValidateCode(AOBject: TModApp): Boolean;
   protected
-    function BeforeSaveToDB(AObject: TModApp): Boolean; virtual;
     function AfterSaveToDB(AObject: TModApp): Boolean; virtual;
+    function BeforeSaveToDB(AObject: TModApp): Boolean; virtual;
     function StringToClass(ModClassName: string): TModAppClass;
   public
-    function SaveToDB(AObject: TModApp): Boolean;
     function DeleteFromDB(AObject: TModApp): Boolean;
-    function OpenQuery(S: string): TDataSet;
-    function Retrieve(ModClassName, AID: string): TModApp; overload;
     function GenerateCustomNo(aTableName, aFieldName: string; aCountDigit: Integer
         = 11): String; overload;
     function GenerateID: String;
     function GenerateNo(aClassName: string): String; overload;
-    function RetrieveSingle(ModClassName, AID: string): TModApp; overload;
+    function OpenQuery(S: string): TDataSet;
+    function Retrieve(ModClassName, AID: string): TModApp; overload;
     function RetrieveByCode(ModClassName, aCode: string): TModApp; overload;
     function RetrieveJSON(AClassName, AID: String): TJSONObject;
-    function SaveToDBLog(AObject: TModApp): Boolean;
+    function RetrieveSingle(ModClassName, AID: string): TModApp; overload;
+    function SaveToDB(AObject: TModApp): Boolean;
     function SaveToDBID(AObject: TModApp): String;
     function SaveToDBJSON(AJSON: TJSONObject): TJSONObject;
+    function SaveToDBLog(AObject: TModApp): Boolean;
     function TestGenerateSQL(AObject: TModApp): TStrings;
   end;
 
@@ -89,7 +87,21 @@ type
     function GetPNLSetting(AUnitID: String): TJSONObject;
   end;
 
+  TCRUDEconomicSetting = class(TCrud)
+  public
+    function GetEconomicSetting(AUnitID: String): TJSONObject;
+  end;
 
+type
+  TCRUDEconomicReport = class(TCrud)
+  private
+    function GetEconomicReport(AUnitID: String; AMonth, AYear: Integer):
+        TModEconomicReport;
+    function GetEconomicSetting(AUnitID: String): TModEconomicSetting;
+  public
+    function GetEconomicPeriod(AUnitID: String; AMonth, AYear: Integer):
+        TJSONObject;
+  end;
 
 {$METHODINFO OFF}
 
@@ -131,41 +143,14 @@ begin
 
 end;
 
-function TCrud.BeforeSaveToDB(AObject: TModApp): Boolean;
-begin
-  Result := True;
-end;
-
 function TCrud.AfterSaveToDB(AObject: TModApp): Boolean;
 begin
   Result := True;
 end;
 
-function TCrud.SaveToDB(AObject: TModApp): Boolean;
-var
-  lSS: TStrings;
+function TCrud.BeforeSaveToDB(AObject: TModApp): Boolean;
 begin
-  Result := False;
-
-  if not ValidateCode(AObject) then exit;
-  if not BeforeSaveToDB(AObject) then exit;
-  lSS := TDBUtils.GenerateSQL(AObject);
-  Try
-    Try
-      TDBUtils.ExecuteSQL(lSS, False);
-      if not AfterSaveToDB(AObject) then exit;
-
-      TDBUtils.Commit;
-      Result := True;
-    except
-      TDBUtils.RollBack;
-      raise;
-    End;
-  Finally
-//    AObject.Free;
-    lSS.Free;
-    AfterExecuteMethod;
-  End;
+  Result := True;
 end;
 
 function TCrud.DeleteFromDB(AObject: TModApp): Boolean;
@@ -187,31 +172,6 @@ begin
     lSS.Free;
     AfterExecuteMethod;
   End;
-end;
-
-function TCrud.OpenQuery(S: string): TDataSet;
-begin
-  Result := TDBUtils.OpenQuery(S);
-  AfterExecuteMethod;
-end;
-
-function TCrud.Retrieve(ModAppClass: TModAppClass; AID: String; LoadObjectList:
-    Boolean = True): TModApp;
-begin
-  Result := ModAppClass.Create;
-  TDBUtils.LoadFromDB(Result, AID, LoadObjectList);
-end;
-
-function TCrud.Retrieve(ModClassName, AID: string): TModApp;
-var
-  lClass: TModAppClass;
-begin
-  lClass := Self.StringToClass(ModClassName);
-  If not Assigned(lClass) then
-    Raise Exception.Create('Class ' + ModClassName + ' not found');
-  Result := Self.Retrieve(lClass, AID);
-
-  AfterExecuteMethod;
 end;
 
 function TCrud.GenerateCustomNo(aTableName, aFieldName: string; aCountDigit:
@@ -260,16 +220,29 @@ begin
   End;
 end;
 
-function TCrud.RetrieveSingle(ModClassName, AID: string): TModApp;
+function TCrud.OpenQuery(S: string): TDataSet;
+begin
+  Result := TDBUtils.OpenQuery(S);
+  AfterExecuteMethod;
+end;
+
+function TCrud.Retrieve(ModClassName, AID: string): TModApp;
 var
   lClass: TModAppClass;
 begin
   lClass := Self.StringToClass(ModClassName);
   If not Assigned(lClass) then
     Raise Exception.Create('Class ' + ModClassName + ' not found');
-  Result := Self.Retrieve(lClass, AID, False);
+  Result := Self.Retrieve(lClass, AID);
 
   AfterExecuteMethod;
+end;
+
+function TCrud.Retrieve(ModAppClass: TModAppClass; AID: String; LoadObjectList:
+    Boolean = True): TModApp;
+begin
+  Result := ModAppClass.Create;
+  TDBUtils.LoadFromDB(Result, AID, LoadObjectList);
 end;
 
 function TCrud.RetrieveByCode(ModClassName, aCode: string): TModApp;
@@ -297,17 +270,32 @@ begin
   end;
 end;
 
-function TCrud.SaveToDBLog(AObject: TModApp): Boolean;
+function TCrud.RetrieveSingle(ModClassName, AID: string): TModApp;
+var
+  lClass: TModAppClass;
+begin
+  lClass := Self.StringToClass(ModClassName);
+  If not Assigned(lClass) then
+    Raise Exception.Create('Class ' + ModClassName + ' not found');
+  Result := Self.Retrieve(lClass, AID, False);
+
+  AfterExecuteMethod;
+end;
+
+function TCrud.SaveToDB(AObject: TModApp): Boolean;
 var
   lSS: TStrings;
 begin
   Result := False;
+
   if not ValidateCode(AObject) then exit;
+  if not BeforeSaveToDB(AObject) then exit;
   lSS := TDBUtils.GenerateSQL(AObject);
   Try
     Try
-      lSS.SaveToFile(ExtractFilePath(ParamStr(0)) + '\SaveToDB.log');
       TDBUtils.ExecuteSQL(lSS, False);
+      if not AfterSaveToDB(AObject) then exit;
+
       TDBUtils.Commit;
       Result := True;
     except
@@ -315,7 +303,9 @@ begin
       raise;
     End;
   Finally
+//    AObject.Free;
     lSS.Free;
+    AfterExecuteMethod;
   End;
 end;
 
@@ -369,6 +359,28 @@ begin
   end;
 end;
 
+function TCrud.SaveToDBLog(AObject: TModApp): Boolean;
+var
+  lSS: TStrings;
+begin
+  Result := False;
+  if not ValidateCode(AObject) then exit;
+  lSS := TDBUtils.GenerateSQL(AObject);
+  Try
+    Try
+      lSS.SaveToFile(ExtractFilePath(ParamStr(0)) + '\SaveToDB.log');
+      TDBUtils.ExecuteSQL(lSS, False);
+      TDBUtils.Commit;
+      Result := True;
+    except
+      TDBUtils.RollBack;
+      raise;
+    End;
+  Finally
+    lSS.Free;
+  End;
+end;
+
 function TCrud.StringToClass(ModClassName: string): TModAppClass;
 var
   ctx: TRttiContext;
@@ -419,7 +431,6 @@ begin
       + ' : ' + AOBject.GetCodeValue + ' sudah ada di Database'
     );
 end;
-
 
 procedure TBaseServerClass.AfterExecuteMethod;
 begin
@@ -821,5 +832,115 @@ begin
   end;
 end;
 
+function TCRUDEconomicSetting.GetEconomicSetting(AUnitID: String): TJSONObject;
+var
+  lEconomicSetting: TModEconomicSetting;
+  lQ: TDataSet;
+  S: string;
+begin
+  Result := nil;
+  S := 'SELECT * FROM TEconomicSetting WHERE Unitusaha = ' + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    if not lQ.Eof then
+    begin
+      lEconomicSetting := Self.Retrieve(TModEconomicSetting, lQ.FieldByName('ID').AsString) as TModEconomicSetting;
+      Result := TJSONUtils.ModelToJSON(lEconomicSetting, [], True);
+    end;
+  finally
+    lQ.Free;
+  end;
+end;
+
+function TCRUDEconomicReport.GetEconomicReport(AUnitID: String; AMonth, AYear:
+    Integer): TModEconomicReport;
+var
+  lQ: TDataSet;
+  S: string;
+begin
+  Result := nil;
+  S := 'SELECT * FROM TECONOMICREPORT '
+      +' WHERE BULAN = ' + IntToStr(AMonth)
+      +' AND TAHUN = ' + IntToStr(AYear)
+      +' AND UNITUSAHA = ' + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    if not lQ.Eof then
+    begin
+      Result := Self.Retrieve(TModEconomicReport, lQ.FieldByName('ID').AsString) as TModEconomicReport;
+    end;
+  finally
+    lQ.Free;
+  end;
+end;
+
+function TCRUDEconomicReport.GetEconomicSetting(AUnitID: String):
+    TModEconomicSetting;
+var
+  lQ: TDataSet;
+  S: string;
+begin
+  Result := nil;
+  S := 'SELECT * FROM TEconomicSetting '
+      +' WHERE UNITUSAHA = ' + QuotedStr(AUnitID);
+  lQ := TDBUtils.OpenQuery(S);
+  try
+    if not lQ.Eof then
+      Result := Self.Retrieve(TModEconomicSetting, lQ.FieldByName('ID').AsString) as TModEconomicSetting;
+  finally
+    lQ.Free;
+  end;
+end;
+
+function TCRUDEconomicReport.GetEconomicPeriod(AUnitID: String; AMonth, AYear:
+    Integer): TJSONObject;
+var
+  lItem: TModEconomicReportItem;
+  lEconomicItem: TModEconomicReportItem;
+  lEconomicReport: TModEconomicReport;
+  lEconomicSetting: TModEconomicSetting;
+  lSettingItem: TModEconomicSettingItem;
+begin
+  lEconomicReport  := GetEconomicReport(AUnitID, AMonth, AYear);
+  Result      := nil;
+  if lEconomicReport = nil then
+  begin
+    lEconomicReport := TModEconomicReport.Create;
+    lEconomicReport.Bulan := AMonth;
+    lEconomicReport.Tahun := AYear;
+    lEconomicReport.UnitUsaha := TModUnit.CreateID(AUnitID);
+  end;
+
+  lEconomicSetting := GetEconomicSetting(AUnitID);
+
+  if lEconomicSetting = nil then exit;
+
+  //reload items
+  Try
+    for lSettingItem in lEconomicSetting.Items do
+    begin
+      lItem := nil;
+      for lEconomicItem in lEconomicReport.Items do
+      begin
+        if lEconomicItem.EconomicSettingItem.ID = lSettingItem.ID then
+        begin
+          lItem := lEconomicItem;
+          break;
+        end;
+      end;
+      if lItem = nil then
+      begin
+        lItem := TModEconomicReportItem.Create();
+        lItem.EconomicSettingItem := TModEconomicSettingItem.CreateID(lSettingItem.ID);
+        lEconomicReport.Items.Add(lItem);
+      end;
+      lItem.EconomicSettingItem.Reload();
+    end;
+  Finally
+    lEconomicSetting.Free;
+  End;
+
+  Result := TJSONUtils.ModelToJSON(lEconomicReport, [], True);
+end;
 
 end.

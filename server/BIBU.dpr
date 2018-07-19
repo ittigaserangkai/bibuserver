@@ -25,7 +25,8 @@ uses
   uMRGroupReport in '..\model\uMRGroupReport.pas',
   uJSONUtils in 'unit\uJSONUtils.pas',
   uMR in '..\model\uMR.pas',
-  uPNL in '..\model\uPNL.pas';
+  uPNL in '..\model\uPNL.pas',
+  uEconomic in '..\model\uEconomic.pas';
 
 {$R *.res}
 
